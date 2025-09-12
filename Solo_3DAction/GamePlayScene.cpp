@@ -1,5 +1,6 @@
 #include "GamePlayScene.h"
 #include "Player.h"
+#include "Src/Enemy.h"
 #include "Src/Field.h"
 #include "Src/Light.h"
 #include "Src/CameraTPS.h"
@@ -10,8 +11,10 @@ void GamePlayScene::start() {
     gsInitDefaultShader();
     // プレイヤーメッシュの読み込み
     gsLoadSkinMesh(Mesh_Player, "Assets/Player/Player.mshb");
+    // 敵メッシュの読み込み
+    gsLoadSkinMesh(Mesh_Enemy, "Assets/Enemy/ghoul.msh");
     // スカイボックス用テクスチャの読み込み
-    gsLoadTexture(Texture_Skybox, "Assets/Skybox/skybox.dds");
+    gsLoadTexture(Texture_Skybox, "Assets/Skybox/default_skybox.dds");
     // ステージオクトリーの読み込み
     gsLoadOctree(Octree_Test_Stage, "Assets/Octree/Octree.oct");
     // ステージ衝突判定用オクトリーの読み込み
@@ -25,6 +28,7 @@ void GamePlayScene::start() {
     world_.add_light(new Light{ &world_ });
     // プレーヤーを追加
     world_.add_actor(new Player{ &world_, GSvector3{ 0.0f, 1.0f, 0.0f } });
+    world_.add_actor(new Enemy{ &world_, GSvector3{ 0.0f, 1.0f, 10.0f } });
 }
 
 // 更新
