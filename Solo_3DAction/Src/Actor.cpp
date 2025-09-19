@@ -1,5 +1,6 @@
 #include "Actor.h"
 
+const float FootOffset{ 0.1f };
 // 更新
 void Actor::update(float) {}
 
@@ -44,6 +45,29 @@ bool Actor::is_collide(const Actor& other) const {
 	return collider().intersects(other.collider());
 }
 
+void Actor::check_ground() {
+	//地面との衝突判定(線分との交差判定)
+ 	GSvector3 position = transform_.position();
+	Line line;
+	line.start = position + collider_.center;
+	line.end = position + GSvector3{ 0.0f,-FootOffset,0.0f };
+	GSvector3 intersect; //地面との交点
+
+	if (world_->field()->collide(line, &intersect)) {
+		//フラグを変更
+		is_ground = true;
+		//交点の位置からy座標のみ補正する
+		position.y = intersect.y;
+		////座標を変更する
+		transform_.position(position);
+		//重力を初期化する
+		velocity_.y = 0.0f;
+	}
+	else {
+		is_ground = false;
+	}
+}
+
 // 死亡しているか？
 bool Actor::is_dead() const {
 	return dead_;
@@ -77,4 +101,10 @@ GSvector3 Actor::velocity() const {
 // 衝突判定データを取得
 BoundingSphere Actor::collider() const {
 	return collider_.transform(transform_.localToWorldMatrix());
+}
+
+//重力計算をする
+void Actor::updateGravity(float delta_time, float grav) {
+	if (is_ground) return;
+	velocity_.y += delta_time * grav;
 }
