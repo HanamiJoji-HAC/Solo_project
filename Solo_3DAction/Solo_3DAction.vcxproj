@@ -84,9 +84,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -98,9 +99,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -144,15 +146,19 @@
     <ClCompile Include="Src\AttackCollider.cpp" />
     <ClCompile Include="Src\BoundingSphere.cpp" />
     <ClCompile Include="Src\CameraTPS.cpp" />
+    <ClCompile Include="Src\Enemy.cpp" />
     <ClCompile Include="Src\Field.cpp" />
     <ClCompile Include="Src\Light.cpp" />
     <ClCompile Include="Src\NumberTexture.cpp" />
+    <ClCompile Include="Src\PlayerBullet.cpp" />
     <ClCompile Include="Src\SceneManager.cpp" />
     <ClCompile Include="Src\World.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerIdleState.h" />
     <ClInclude Include="Src\Actor.h" />
     <ClInclude Include="Src\ActorManager.h" />
     <ClInclude Include="Src\AnimatedMesh.h" />
@@ -160,16 +166,21 @@
     <ClInclude Include="Src\AttackCollider.h" />
     <ClInclude Include="Src\BoundingSphere.h" />
     <ClInclude Include="Src\CameraTPS.h" />
+    <ClInclude Include="Src\Enemy.h" />
     <ClInclude Include="Src\Field.h" />
     <ClInclude Include="Src\IScene.h" />
     <ClInclude Include="Src\IWorld.h" />
     <ClInclude Include="Src\Light.h" />
     <ClInclude Include="Src\Line.h" />
     <ClInclude Include="Src\NumberTexture.h" />
+    <ClInclude Include="Src\PlayerBullet.h" />
     <ClInclude Include="Src\Ray.h" />
     <ClInclude Include="Src\SceneManager.h" />
     <ClInclude Include="Src\SceneNull.h" />
     <ClInclude Include="Src\World.h" />
+    <ClInclude Include="IState.h" />
+    <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="StateNull.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
