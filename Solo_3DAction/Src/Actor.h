@@ -5,6 +5,9 @@
 #include <GSTransform.h>
 #include <string>
 #include "BoundingSphere.h"
+#include "Field.h"
+#include "IWorld.h"
+#include "Line.h"
 
 class IWorld; // ワールド抽象インターフェースの前方宣言
 
@@ -33,10 +36,14 @@ public:
 	void collide(Actor& other);
 	// 死亡する
 	void die();
+	// 重力
+	void updateGravity(float delta_time, float grav);
 	// 衝突しているか？
 	bool is_collide(const Actor& other) const;
 	// 死亡しているか？
 	bool is_dead() const;
+	//地上にいるか？
+	void check_ground();
 	// 名前を取得
 	const std::string& name() const;
 	// タグを取得
@@ -71,6 +78,9 @@ protected:
 	BoundingSphere collider_;
 	// 死亡フラグ
 	bool dead_{ false };
+	//重力値
+	float gravity{ -0.036f };
+	bool is_ground{ false };
 };
 
 #endif
