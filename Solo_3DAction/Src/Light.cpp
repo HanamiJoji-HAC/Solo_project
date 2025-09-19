@@ -10,9 +10,9 @@ Light::Light(IWorld* world) {
 // •`‰æ
 void Light::draw() const {
 	float ambient[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	float diffuse[4] = { 1.0f, 0.8f, 0.3f, 1.0f };
+	float diffuse[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	float specular[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	float position[4] = { 100.0f, 100.f, 100.0f, 0.0f };
+	float position[4] = { 100.0f, 200.0f, 100.0f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
