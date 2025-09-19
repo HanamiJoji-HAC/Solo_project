@@ -5,9 +5,9 @@
 #include "imgui/imgui.h"
 
 // プレーヤーからの相対座標
-GSvector3 PlayerOffset{ 0.0f, 0.0f, 0.0f };
+GSvector3 PlayerOffset{ 0.0f, 3.0f, -5.0f };
 // カメラの注視点の補正値
-GSvector3 ReferencePointOffset{ 0.0f, 1.0f, 0.0f };
+GSvector3 ReferencePointOffset{ 0.0f, 1.0f, 4.0f };
 // コンストラクタ
 CameraTPS::CameraTPS(IWorld* world, const GSvector3& position, const GSvector3& at) {
 	// ワールドを設定
@@ -24,13 +24,12 @@ CameraTPS::CameraTPS(IWorld* world, const GSvector3& position, const GSvector3& 
 
 // 更新
 void CameraTPS::update(float delta_time) {
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("camera", ReferencePointOffset);
+	ImGui::End();
 	// プレーヤーを検索
 	Actor* player = world_->find_actor("Player");
 	if (player == nullptr) return;
-	ImGui::Begin("Camera");
-	ImGui::DragFloat3("Offset", PlayerOffset);
-	ImGui::DragFloat3("PointOffset", ReferencePointOffset);
-	ImGui::End();
 	// 視点の位置を求める（プレーヤーの背後の座標）
 	GSvector3 position = PlayerOffset * player->transform().localToWorldMatrix();
 	// 注視点の位置を求める（プレーヤーの頭部の少し上あたりの座標）
@@ -43,10 +42,9 @@ void CameraTPS::update(float delta_time) {
 	}
 	// スムースダンプによる滑らかな補間
 	const float SmoothTime{ 12.0f }; // 補間フレーム数
-	const float MaxSpeed{ 0.3f }; // 移動スピードの最大値
-	position = GSvector3::smoothDamp(transform_.position(), position, velocity_,
-		SmoothTime, MaxSpeed, delta_time);
-	transform_.rotate(PlayerOffset);
+	const float MaxSpeed{ 1.0f }; // 移動スピードの最大値
+	//position = GSvector3::smoothDamp(transform_.position(), position, velocity_,
+	//	SmoothTime, MaxSpeed, delta_time);
 
 	// 視点の位置を設定
 	transform_.position(position);
@@ -64,7 +62,7 @@ void CameraTPS::draw() const {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(
-		0.0f, 2.0f, -4.0f, // 視点の位置
+		eye.x, eye.y, eye.z, // 視点の位置
 		at.x, at.y, at.z, // 注視点の位置
 		0.0f, 1.0f, 0.0f // 視点の上方向
 	);
