@@ -50,9 +50,6 @@ public:
 	// ライトの取得
 	virtual Actor* light() override;
 
-	// カメラの取得
-	World(const World& other) = delete;
-	World& operator = (const World& other) = delete;
 	// スコアの取得
 	//Score& score();
 	//// タイマの取得
@@ -73,6 +70,10 @@ private:
 	//Score  score_;
 	//// タイマ
 	//Timer timer_;
+public:
+	//コピー禁止
+	World(const World& other) = delete;
+	World& operator = (const World& other) = delete;
 };
 
 #endif
