@@ -1,7 +1,7 @@
 #include "CameraTPS.h"
-#include "IWorld.h"
-#include "Field.h"
-#include "Line.h"
+#include "World/IWorld.h"
+#include "World/Field.h"
+#include "Math/Line.h"
 #include "imgui/imgui.h"
 
 // プレーヤーからの相対座標
@@ -27,6 +27,13 @@ void CameraTPS::update(float delta_time) {
 	ImGui::Begin("camera");
 	ImGui::DragFloat3("camera", ReferencePointOffset);
 	ImGui::End();
+	//GSvector2 camera_input = input_.get_right_stick_input();
+	//velocity_.x = camera_input.x;
+	//velocity_.y = camera_input.y;
+	//GSvector3 velocity{ 0.0f, 0.0f, 0.0f };
+	//velocity += camera_input * delta_time;
+	//transform_.position(velocity);
+	//if (!gsGetKeyState(GKEY_P)) return;
 	// プレーヤーを検索
 	Actor* player = world_->find_actor("Player");
 	if (player == nullptr) return;
@@ -41,10 +48,10 @@ void CameraTPS::update(float delta_time) {
 		position = intersect;
 	}
 	// スムースダンプによる滑らかな補間
-	const float SmoothTime{ 12.0f }; // 補間フレーム数
-	const float MaxSpeed{ 1.0f }; // 移動スピードの最大値
-	//position = GSvector3::smoothDamp(transform_.position(), position, velocity_,
-	//	SmoothTime, MaxSpeed, delta_time);
+	const float SmoothTime{ 3.0f }; // 補間フレーム数
+	const float MaxSpeed{ 20.0f }; // 移動スピードの最大値
+	position = GSvector3::smoothDamp(transform_.position(), position, velocity_,
+		SmoothTime, MaxSpeed, delta_time);
 
 	// 視点の位置を設定
 	transform_.position(position);
