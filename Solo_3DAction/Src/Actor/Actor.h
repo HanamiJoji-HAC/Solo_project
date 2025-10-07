@@ -4,10 +4,10 @@
 #include <gslib.h>
 #include <GSTransform.h>
 #include <string>
-#include "BoundingSphere.h"
-#include "Field.h"
-#include "IWorld.h"
-#include "Line.h"
+#include "Collision/BoundingSphere.h"
+#include "World/Field.h"
+#include "World/IWorld.h"
+#include "Math/Line.h"
 
 class IWorld; // ワールド抽象インターフェースの前方宣言
 
@@ -43,7 +43,7 @@ public:
 	// 死亡しているか？
 	bool is_dead() const;
 	//地上にいるか？
-	void check_ground();
+	bool check_ground();
 	// 名前を取得
 	const std::string& name() const;
 	// タグを取得

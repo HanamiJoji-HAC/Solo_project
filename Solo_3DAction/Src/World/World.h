@@ -2,7 +2,7 @@
 #define WORLD_H_
 
 #include "IWorld.h"
-#include "ActorManager.h"
+#include "Actor/ActorManager.h"
 //#include "Score.h"
 //#include "Timer.h"
 #include <gslib.h>

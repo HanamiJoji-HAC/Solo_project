@@ -1,10 +1,10 @@
 #include "GamePlayScene.h"
-#include "Player.h"
-#include "Src/Enemy.h"
-#include "Src/Field.h"
-#include "Src/Light.h"
-#include "Src/CameraTPS.h"
-#include "Src/Assets.h"
+#include "Actor/Player/Player.h"
+#include "Actor/Enemy/Enemy.h"
+#include "World/Field.h"
+#include "Light/Light.h"
+#include "Camera/CameraTPS.h"
+#include "Assets.h"
 #include <GSstandard_shader.h>
 // ŠJŽn
 void GamePlayScene::start() {

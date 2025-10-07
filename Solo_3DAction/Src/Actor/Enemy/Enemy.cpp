@@ -1,8 +1,8 @@
 #include "Enemy.h"
-#include "IWorld.h"
-#include "Field.h"
-#include "Line.h"
-#include "AttackCollider.h"
+#include "World/IWorld.h"
+#include "World/Field.h"
+#include "Math/Line.h"
+#include "Collision/AttackCollider.h"
 #include "Assets.h"
 
 enum { // “G‚Ìƒ‚[ƒVƒ‡ƒ“”Ô†

@@ -1,6 +1,6 @@
 #include <GSGame.h>
-#include "Src/SceneManager.h"
-#include "GamePlayScene.h"
+#include "Scene/SceneManager.h"
+#include "Scene/GamePlayScene.h"
 class MyGame : public gslib::Game {
 public:
     // コンストラクタ
