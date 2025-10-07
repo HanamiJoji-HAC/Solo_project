@@ -1,6 +1,6 @@
 #ifndef ATTACK_COLLIDER_H_
 #define ATTACK_COLLIDER_H_
-#include "Actor.h"
+#include "Actor/Actor.h"
 // çUåÇîªíË
 class AttackCollider : public Actor {
 public:

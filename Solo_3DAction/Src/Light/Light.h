@@ -1,7 +1,7 @@
 #ifndef LIGHT_H_
 #define LIGHT_H_
 
-#include "Actor.h"
+#include "Actor/Actor.h"
 
 // ライトクラス
 class Light : public Actor {

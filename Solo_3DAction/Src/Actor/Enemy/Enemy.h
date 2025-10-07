@@ -1,8 +1,8 @@
 #ifndef ENEMY_H_
 #define ENEMY_H_
 
-#include "Actor.h"
-#include "AnimatedMesh.h"
+#include "Actor/Actor.h"
+#include "Rendering/AnimatedMesh.h"
 
 // “GƒNƒ‰ƒX
 class Enemy : public Actor {

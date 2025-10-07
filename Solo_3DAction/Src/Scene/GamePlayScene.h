@@ -1,8 +1,8 @@
 #ifndef GAME_PLAY_SCENE_H_
 #define GAME_PLAY_SCENE_H_
 
-#include "Src/IScene.h"
-#include "Src/World.h"
+#include "IScene.h"
+#include "World/World.h"
 
 // ゲームプレイシーン
 class GamePlayScene : public IScene {

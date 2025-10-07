@@ -1,7 +1,7 @@
 #include "Field.h"
-#include "Ray.h"
-#include "Line.h"
-#include "BoundingSphere.h"
+#include "Math/Ray.h"
+#include "Math/Line.h"
+#include "Collision/BoundingSphere.h"
 
 // コンストラクタ
 Field::Field(GSuint octree, GSuint collider, GSuint skybox) :

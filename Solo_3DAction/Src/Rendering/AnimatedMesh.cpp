@@ -87,7 +87,7 @@ bool AnimatedMesh::is_end_motion() const {
 	// ループモーションは終了しない
 	if (motion_loop_) return false;
 	// 終了しているか？
-	return motion_timer_ >= (motion_end_time() - 1.0f);
+	return motion_timer_ >= motion_end_time();
 }
 // 現在のモーションの再生時間を取得
 float AnimatedMesh::motion_time() const {
