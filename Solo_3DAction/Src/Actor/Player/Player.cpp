@@ -1,10 +1,16 @@
 //Todo:名前順とか命名規則決める
+#include "Assets.h"
+#include "Collision/AttackCollider.h"
 #include "Player.h"
+#include "PlayerBullet.h"
+#include "PlayerStates/PlayerAttackState.h"
+#include "PlayerStates/PlayerDeadState.h"
+#include "PlayerStates/PlayerGetDamageState.h"
+#include "PlayerStates/PlayerIdleState.h"
+#include "PlayerStates/PlayerJumpState.h"
+#include "PlayerStates/PlayerMoveState.h"
+#include "PlayerStates/PlayerStunState.h"
 #include "imgui/imgui.h"
-#include "Src/Assets.h"
-#include "Src/AttackCollider.h"
-#include "Src/PlayerBullet.h"
-#include "PlayerIdleState.h"
 //Todo:コメントアウトに規則を持たせる
 //自分の高さ
 const float PlayerHeight{ 1.0f };
@@ -13,60 +19,31 @@ const float PlayerRadius{ 0.4f };
 
 const float JumpPower{ 0.60f };
 
-const float grav{ -0.020f };
-
 const float WalkSpeed{ 0.1f };
 
 // 足元のオフセット
 const float FootOffset{ 0.1f };
-//モーションデバッグ用
-int motion_num{ 0 };
-
-// モーション番号
-enum {
-    MotionIdle        = 37,     //アイドル
-    MotionDamage      = 35,     //ダメージ
-    MotionAttack      = 57,     //攻撃
-    MotionJump        = 40,     //ジャンプ
-    MotionWalkForward = 50,     //歩き（前）
-    MotionWalkBack    = 51,     //歩き（後）
-    MotionWalkLeft    = 53,     //歩き（左）
-    MotionWalkRight   = 54,     //歩き（右）
-    MotionFry         = 34      //飛ぶ
-    //MotionMove = 52,       // 走り
-    //MotionDown = 3,      // ダウン
-    //MotionGetUp = 31,     // 起き上がり
-    //MotionJumpStart = 2,  // ジャンプ開始
-    //MotionLanding = 31,    // 着地中
-    //MotionJumpAttack = 32,// 空中攻撃中
-    //MotionAttack2 = 4,
-    //MotionAttack3 = 32
-};
 
 // コンストラクタ
 Player::Player(IWorld* world, const GSvector3& position) :
-    mesh_{ Mesh_Player, MotionIdle, true},
-    motion_{ MotionIdle },
+    mesh_{ Mesh_Player, (GSuint)Motion::MotionIdle, true},
+    motion_{ (GSuint)Motion::MotionIdle },
     motion_loop_{ true },
-    state_{ State::Move },
     state_timer_{ 0.0f } {
     name_ = "Player";
     transform_.position(position);
     world_ = world;
     //衝突判定球の設定
     collider_ = BoundingSphere{ PlayerRadius, GSvector3{0.0f,PlayerHeight,0.0f} };
+    //状態を設定
     add_state();
-    statemachine_.change_state((GSuint)State::Attack);
+    //初期状態を設定
+    change_state(State::Move);
 }
 
 // 更新
 void Player::update(float delta_time) {
     statemachine_.update(delta_time);
-    //重力
-    updateGravity(delta_time, grav);
-    //状態の更新
-    update_state(delta_time);
-
     // メッシュを更新
     mesh_.change_motion(motion_, motion_loop_);
     mesh_.update(delta_time);
@@ -74,19 +51,21 @@ void Player::update(float delta_time) {
     mesh_.transform(transform_.localToWorldMatrix());
     //接地チェック
     check_ground();
-
-    //デバッグ用↓
+#ifndef DEBUG
     ImGui::Begin("Debug");
-    ImGui::Text("is_ground: %s", is_ground ? "true" : "false");
+    bool ground = check_ground();
+    ImGui::Text("is_ground: %s", ground ? "true" : "false");
     ImGui::DragFloat3("velocity", velocity_);
     ImGui::DragFloat3("position", transform_.position());
-    ImGui::DragInt("motion_num:", &motion_num);
-    int state = (int)state_;
-    ImGui::DragInt("State", &state);
-    state_ = (State)state;
+    auto motion = static_cast<int>(motion_);
+    ImGui::DragInt("motion_num:", &motion);
+    ImGui::DragFloat("motion_timer", &state_timer_);
+    auto state = statemachine_.is_current_state((int)PlayerState::Move);
+    ImGui::Checkbox("State", &state);
     ImGui::End();
     if (gsGetKeyTrigger(GKEY_UP)) ++motion_num;
     if (gsGetKeyTrigger(GKEY_DOWN)) --motion_num;
+#endif
 }
 
 // 描画
@@ -94,11 +73,10 @@ void Player::draw() const {
     mesh_.draw();
     collider().draw();
 }
-
 // 衝突リアクション
 void Player::react(Actor& other) {
     // ダメージ中はリアクションしない
-    if (state_ == State::Damage) return;
+    if (state_ == State::GetDamage) return;
     // 敵と衝突した場合はダメージ中に遷移
     if (other.tag() == "EnemyTag") {
         // ダメージ効果音を再生
@@ -106,118 +84,57 @@ void Player::react(Actor& other) {
         // ダメージ中は衝突判定を無効にする
         enable_collider_ = false;
         // ダメージ中に遷移する
-        change_state(State::Damage, MotionDamage, false);
     }
 }
 
 //移動
 void Player::move(float delta_time) {
-    //ジャンプ
-    if (is_ground && gsGetKeyTrigger(GKEY_SPACE)) {
-        change_state(State::Jump, MotionJump, false);
-        return;
-    }
-    //攻撃
-    if (is_ground && gsGetMouseButtonState(GMOUSE_BUTTON_2)) {
-        change_state(State::Attack, MotionAttack, false);
-        generate_bullet();
-        return;
-    }
-    //跳躍
-    if (is_ground && gsGetKeyTrigger(GKEY_LSHIFT)) {
-        change_state(State::Fry, MotionFry, false);
-        return;
-    }
-    //何もしていなければ待機
-    GSuint motion{ MotionIdle };
-
-    //移動処理
     // カメラの前方向ベクトルを取得
     GSvector3 forward = world_->camera()->transform().forward();
     forward.y = 0.0f;
     // カメラの右方向ベクトルを取得
     GSvector3 right = world_->camera()->transform().right();
     right.y = 0.0f;
+    //入力値を取得(正規化して斜辺移動の値を一定にする)
+    GSvector2 input = input_.get_left_stick_input().normalized();
     // キーの入力値から移動ベクトルを計算
     GSvector3 velocity{ 0.0f, 0.0f, 0.0f };
-    if (gsGetKeyState(GKEY_W)) {
-        velocity += forward;
-        motion = MotionWalkForward;
-    }
-    if (gsGetKeyState(GKEY_S)) {
-        velocity -= forward;
-        motion = MotionWalkBack;
-    }
-    if (gsGetKeyState(GKEY_A)) {
-        velocity -= right;
-        motion = MotionWalkLeft;
-    }
-    if (gsGetKeyState(GKEY_D)) {
-        velocity += right;
-        motion = MotionWalkRight;
-    }
-    velocity = velocity.normalized() * WalkSpeed * delta_time;
-    velocity_.x = velocity.x;
-    velocity_.z = velocity.z;
-
-    change_state(State::Move, motion, false);
+    velocity += forward * input.y;
+    velocity += right * input.x;
+    velocity_.x = velocity.x * WalkSpeed * delta_time;
+    velocity_.z = velocity.z * WalkSpeed * delta_time;
     transform_.translate(velocity_);
-}
-// 状態の更新
-void Player::update_state(float delta_time) {
-    // 状態遷移
-    switch (state_) {
-    case State::Idle:                                   break;
-    case State::Move:   move(delta_time);               break;
-    case State::Jump:   jump(JumpPower, delta_time);    break;
-    case State::Attack: attack(delta_time);             break;
-    case State::Damage: damage(delta_time);             break;
-    }
-    // 状態タイマの更新
-    state_timer_ += delta_time;
-}
-
-// 状態の変更
-void Player::change_state(State state, GSuint motion, bool loop) {
-    motion_ = motion;
-    motion_loop_ = loop;
-    state_ = state;
-    state_timer_ = 0.0f;
-}
-
-bool Player::is_idle() {
-    if (is_ground && velocity_.x == 0 && velocity_.y == 0 && velocity_.z == 0) {
-        return true;
-    }
 }
 
 // 攻撃中
 void Player::attack(float delta_time) {
+    state_timer_ += delta_time;
     // 攻撃モーションの終了を待つ
-    if (state_timer_ >= mesh_.motion_end_time()) {
-        move(delta_time);
+    if (is_motion_end()) {
+        change_state(State::Move);
     }
 }
 
 // ダメージ中
 void Player::damage(float delta_time) {
+    state_timer_ += delta_time;
     // ダメージモーションの終了を待つ
-    if (state_timer_ >= mesh_.motion_end_time()) {
-        move(delta_time);
+    if (is_motion_end()) {
+        change_state(State::Move);
     }
 }
 
 void Player::jump(float jumpPower, float delta_time) {
+    state_timer_+= delta_time;
     //ジャンプ力を設定(一度のみ)
-    if (is_ground) {
+    if (check_ground()) {
         velocity_.y = jumpPower;
     }
-    // 攻撃モーションの終了を待つ
+    // モーションの終了を待つ
     if (state_timer_ >= mesh_.motion_end_time() / 4) {
-        move(delta_time);
+        change_state(State::Move);
     }
     transform_.translate(velocity_);
-
 }
 
 // アクターとの衝突処理
@@ -236,8 +153,8 @@ void Player::collide_actor(Actor& other) {
     // 重なっている部分の半分の距離だけ離れる移動量を求める
     GSvector3 v = (position - target).getNormalized() * overlap * 0.5f;
     transform_.translate(v, GStransform::Space::World);
-    //// フィールドとの衝突判定
-    //collide_field();
+    // フィールドとの衝突判定
+    collide_field();
 }
 
 void Player::generate_attack_collider() {
@@ -307,7 +224,34 @@ void Player::collide_field() {
         velocity_.y = 0.0f;
     }
 }
-
+//状態を追加する
 void Player::add_state() {
-    statemachine_.add_state((GSuint)State::Attack, std::make_shared<PlayerIdleState>(*this));
+    statemachine_.add_state((GSuint)State::Attack, std::make_shared<PlayerAttackState>(*this));
+    statemachine_.add_state((GSuint)State::Dead, std::make_shared<PlayerDeadState>(*this));
+    statemachine_.add_state((GSuint)State::GetDamage, std::make_shared<PlayerGetDamageState>(*this));
+    statemachine_.add_state((GSuint)State::Idle, std::make_shared<PlayerIdleState>(*this));
+    statemachine_.add_state((GSuint)State::Jump, std::make_shared<PlayerJumpState>(*this));
+    statemachine_.add_state((GSuint)State::Move, std::make_shared<PlayerMoveState>(*this));
+    statemachine_.add_state((GSuint)State::Stun, std::make_shared<PlayerStunState>(*this));
+}
+
+void Player::change_motion(Motion motion, bool loop) {
+    motion_ = (GSuint)motion;
+    motion_loop_ = loop;
+    mesh_.change_motion(motion_, motion_loop_);
+}
+
+void Player::change_motion(int motion, bool loop) {
+    motion_ = (GSuint)motion;
+    motion_loop_ = loop;
+    mesh_.change_motion(motion_, motion_loop_);
+};
+
+void Player::change_state(State state_num) {
+    state_timer_ = 0;
+    statemachine_.change_state((GSuint)state_num);
+}
+
+bool Player::is_motion_end() {
+    return state_timer_ >= mesh_.motion_end_time();
 }

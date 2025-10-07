@@ -1,6 +1,6 @@
 #ifndef PLAYER_BULLET_H_
 #define PLAYER_BULLET_H_
-#include "Actor.h"
+#include "Actor/Actor.h"
 
 // プレーヤーの弾クラス
 class PlayerBullet : public Actor {
