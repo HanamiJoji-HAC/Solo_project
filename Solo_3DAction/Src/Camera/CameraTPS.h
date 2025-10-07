@@ -1,7 +1,7 @@
 #ifndef CAMERA_TPS_H_
 #define CAMERA_TPS_H_
-#include "Actor.h"
-
+#include "Actor/Actor.h"
+#include "Input.h"
 // 三人称カメラクラス
 class CameraTPS : public Actor {
 public:
@@ -11,6 +11,8 @@ public:
 	virtual void update(float delta_time) override;
 	// 描画
 	virtual void draw() const override;
+private:
+	Input& input_ = Input::get_instance();
 };
 
 #endif
