@@ -3,14 +3,20 @@
 #include <gslib.h>
 
 enum class InputAction {
-	FLONT,
-	BACK,
+	UP,
+	DOWN,
 	LEFT,
 	RIGHT,
-	JUMP,   //ジャンプ
-	ATTACK  //攻撃
+	JUMP,	 //ジャンプ
+	ATTACK,  //攻撃
+	SETBOOST,
+	BOOST,
+	FIRE,
+	L_UP,
+	L_DOWN,
+	L_LEFT,
+	L_RIGHT
 };
-
 class Input {
 public:
 	// デフォルトコンストラクタ
@@ -18,8 +24,10 @@ public:
 	// デストラクタ
 	~Input() = default;
 
-	GSvector2 get_left_stick_input();
-	GSvector2 get_right_stick_input();
+	GSvector2 get_left_stick_input_value();
+	float get_left_stick_input_angle();
+	GSvector2 get_right_stick_input_value();
+	float get_right_stick_input_angle();
 	bool get_action_input(InputAction action);
 	static Input& get_instance();
 private:
