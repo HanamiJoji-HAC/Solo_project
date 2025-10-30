@@ -11,13 +11,10 @@
 #include "PlayerStates/PlayerMoveState.h"
 #include "PlayerStates/PlayerStunState.h"
 #include "PlayerStates/PlayerBoostState.h"
+#include "PlayerStates/PlayerFireState.h"
 #include "imgui/imgui.h"
 #include "GameConfig.h"
-//Todo:コメントアウトに規則を持たせる
-//Status:身長
-const float PlayerHeight{ 1.0f };
-//Status:衝突判定用の半径
-const float PlayerRadius{ 0.4f };
+//Todo:コメントアウトに規則を持たせるw
 
 // コンストラクタ
 Player::Player(IWorld* world, const GSvector3& position, const Status& status) : Charactor(status),
@@ -27,10 +24,11 @@ Player::Player(IWorld* world, const GSvector3& position, const Status& status) :
     state_timer_{ 0 } 
 {
     name_ = "Player";
+    tag_ = "PlayerTag";
     transform_.position(position);
     world_ = world;
     //衝突判定球の設定
-    collider_ = BoundingSphere{ PlayerRadius, GSvector3{0.0f, height_ ,0.0f} };
+    collider_ = BoundingSphere{ radius_, GSvector3{0.0f, height_ ,0.0f} };
     //状態を設定
     add_state();
     //初期状態を設定
@@ -45,22 +43,8 @@ Player::Player(IWorld* world, const GSvector3& position, const Status& status) :
 // 更新
 void Player::update(float delta_time) {
     statemachine_.update(delta_time);
-    if (gsGetKeyTrigger(GKEY_UP)) {
-        ++up_motion_num_;
-        mesh_.change_motion(0, up_motion_num_);
-    }
-    if (gsGetKeyTrigger(GKEY_DOWN)) {
-        --up_motion_num_;
-        mesh_.change_motion(0, up_motion_num_);
-    };
-    if (gsGetKeyTrigger(GKEY_LEFT)) {
-        --down_motion_num_;
-        mesh_.change_motion(1, down_motion_num_);
-    };
-    if (gsGetKeyTrigger(GKEY_RIGHT)) {
-        ++down_motion_num_;
-        mesh_.change_motion(1, down_motion_num_);
-    };
+    if(is_invisible()) start_invisible(delta_time);
+
     // メッシュを更新
     mesh_.update(delta_time);
     // 行列を設定
@@ -103,11 +87,13 @@ void Player::update(float delta_time) {
     ImGui::DragFloat("boost_speed", &status_.boost_speed_);
     ImGui::DragFloat("jump_power", &status_.jump_power_);
     ImGui::DragFloat("gravity_", &status_.gravity_);
+    ImGui::DragFloat("invisible_timer", &status_.invisible_timer_);
     bool ground = check_ground();
     ImGui::Text("is_ground: %s", ground ? "true" : "false");
+    bool invisible = is_invisible();
+    ImGui::Text("is_invisible: %s", invisible ? "true" : "false");
     ImGui::End();
 #endif // !DEBUG
-
 }
 
 // 描画
@@ -115,35 +101,37 @@ void Player::draw() const {
     mesh_.draw();
     collider().draw();
 }
+
+// GUI描画
 void Player::draw_gui() const
 {
-    GSuint bone_num = mesh_.bone_count(0);
-    for (int i = 0; i <= 10; ++i) {
-        GSvector2 p;
-        GSvector3 o = mesh_.bone_matrices(i).position();
-        gsCalculateScreen(&p, &o);
-        gsTextPos(p.x, p.y);
-        std::string text = std::to_string(i);
-        gsDrawText(text.c_str());
-    }
+    //GSuint bone_num = mesh_.bone_count(0);
+    //for (int i = 0; i <= 10; ++i) {
+    //    GSvector2 p;
+    //    GSvector3 o = mesh_.bone_matrices(i).position();
+    //    gsCalculateScreen(&p, &o);
+    //    gsTextPos(p.x, p.y);
+    //    std::string text = std::to_string(i);
+    //    gsDrawText(text.c_str());
+    //}
 }
 // 衝突リアクション
 void Player::react(Actor& other) {
     // ダメージ中はリアクションしない
-    if (state_ == State::GetDamage) return;
+    if (state_ == State::GetDamage || status_.is_invisible_) return;
     // 敵と衝突した場合はダメージ中に遷移
     if (other.tag() == "EnemyTag") {
         // ダメージ効果音を再生
         //gsPlaySE(Se_PlayerDamage);
         // ダメージ中は衝突判定を無効にする
-        enable_collider_ = false;
+        set_invisible(true, status_.default_inbisible_timer_);
         // ダメージ中に遷移する
         change_state(State::GetDamage);
-        change_motion(PlayerMotion::MotionDamage, true);
+        change_motion(PlayerMotion::MotionDamage, false);
     }
 }
 
-//移動
+// 移動
 void Player::move(float delta_time, float move_speed) {
     // Lスティックの入力情報を取得
     input_.get_left_stick_input_angle();
@@ -178,21 +166,27 @@ void Player::move(float delta_time, float move_speed) {
     transform_.translate(velocity, GStransform::Space::World);
 }
 
-// 攻撃中
+// 攻撃
 void Player::attack() {
+    generate_attack_collider();
+}
+// 射撃
+void Player::fire() {
     generate_bullet_collider();
 }
+
 // ジャンプ
 void Player::jump() {
     transform_.translate(velocity_, GStransform::Space::World);
 }
-//ジャンプ中
+
+//ジャンプ力を設定
 void Player::set_jump(float jumpPower) {
-    //ジャンプ力を設定
     velocity_.y = jumpPower;
     transform_.translate(velocity_, GStransform::Space::World);
 }
 
+// ブースト
 void Player::boost(float delta_time, float boost_power) {
     int boost_input = input_.get_action_input(InputAction::BOOST);
     velocity_.y = boost_power * (delta_time / cREF) * boost_input;
@@ -200,6 +194,7 @@ void Player::boost(float delta_time, float boost_power) {
     transform_.translate(velocity_);
 }
 
+// 攻撃判定の生成
 void Player::generate_attack_collider() {
     // 攻撃判定を出現させる場所の距離
     const float AttackColliderDistance{ 1.0f };
@@ -211,7 +206,7 @@ void Player::generate_attack_collider() {
     // 攻撃判定が有効になるまでの遅延時間
     const float AttackColliderDelay{ 3.0f };
     // 攻撃判定の寿命
-    const float AttackColliderLifeSpan{ 15.0f };
+    const float AttackColliderLifeSpan{ 30.0f };
 
     // 衝突判定を出現させる座標を求める（前方の位置）
     GSvector3 position = transform_.position() + transform_.forward() * AttackColliderDistance;
@@ -221,10 +216,10 @@ void Player::generate_attack_collider() {
     BoundingSphere collider{ AttackColliderRadius, position };
     // 衝突判定を出現させる
     world_->add_actor(new AttackCollider{ world_, collider,
-        "PlayerTag", "PlayerAttack", tag_, AttackColliderLifeSpan, AttackColliderDelay });
+        "PlayerAttackTag", "PlayerAttack", tag_, AttackColliderLifeSpan, AttackColliderDelay });
 }
 
-// 弾の生成
+// 弾判定の生成
 void Player::generate_bullet_collider() {
     // 弾を生成する場所の距離
     const float GenerateDistance{ 0.8f };
@@ -242,7 +237,7 @@ void Player::generate_bullet_collider() {
     world_->add_actor(new PlayerBullet{ world_, position, velocity });
 }
 
-//状態を追加する
+// ステートの追加
 void Player::add_state() {
     statemachine_.add_state((GSuint)State::Attack, std::make_shared<PlayerAttackState>(*this));
     statemachine_.add_state((GSuint)State::Dead, std::make_shared<PlayerDeadState>(*this));
@@ -252,8 +247,10 @@ void Player::add_state() {
     statemachine_.add_state((GSuint)State::Move, std::make_shared<PlayerMoveState>(*this));
     statemachine_.add_state((GSuint)State::Stun, std::make_shared<PlayerStunState>(*this));
     statemachine_.add_state((GSuint)State::Boost,std::make_shared<PlayerBoostState>(*this));
+    statemachine_.add_state((GSuint)State::Fire, std::make_shared<PlayerFireState>(*this));
 }
 
+// モーションを変更する
 void Player::change_motion(Motion motion, bool loop) {
     state_timer_ = 0;
     motion_ = (GSuint)motion;
@@ -261,6 +258,7 @@ void Player::change_motion(Motion motion, bool loop) {
     mesh_.change_motion(motion_, motion_loop_);
 }
 
+// モーションを変更する(番号指定)
 void Player::change_motion(int motion, bool loop) {
     state_timer_ = 0;
     motion_ = (GSuint)motion;
@@ -268,22 +266,22 @@ void Player::change_motion(int motion, bool loop) {
     mesh_.change_motion(motion_, motion_loop_);
 };
 
+// ステートを変更する
 void Player::change_state(State state_num) {
     statemachine_.change_state((GSuint)state_num);
 }
 
+// モーションは終了しているか？
 bool Player::is_motion_end() {
     return mesh_.is_motion_end();
 }
 
-float Player::get_gravity() {
-    return status_.gravity_;
-}
-
+// ステートタイマの更新
 void Player::update_state_timer(float delta_time) {
     state_timer_ += delta_time;
 }
 
+// 現在のステートを文字列に変換
 const char*Player::current_state_to_string(State state) {
     switch (state)
     {
@@ -300,10 +298,30 @@ const char*Player::current_state_to_string(State state) {
     default:                        return "None";
     }
 }
-float Player::get_move_speed() {
-    return status_.move_speed_;
-}
 
+// ステータスを参照する
 Status& Player::get_status() {
     return status_;
+}
+
+// 死亡中
+bool Player::is_dying() {
+    //体力が残っているか？
+    return status_.hp_ <= 0;
+}
+
+// モーションを変更する(レイヤー指定)
+void Player::change_motion(int layer, Motion motion, bool loop) {
+    state_timer_ = 0;
+    motion_ = (GSuint)motion;
+    motion_loop_ = loop;
+    mesh_.change_motion(layer, motion_, loop);
+}
+
+// モーションを変更する(レイヤー、番号指定)
+void Player::change_motion(int layer,int motion, bool loop) {
+    state_timer_ = 0;
+    motion_ = (GSuint)motion;
+    motion_loop_ = loop;
+    mesh_.change_motion(layer, motion_, loop);
 }

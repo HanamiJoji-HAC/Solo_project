@@ -8,12 +8,26 @@ void PlayerIdleState::on_enter(){
 //ステートが実行中に毎フレーム呼ばれる
 void PlayerIdleState::on_update(float delta_time) {
 #ifndef DEBUG
+    if (gsGetKeyTrigger(GKEY_UP)) {
+        ++motion_num_;
+        owner_.change_motion(motion_num_, true);
+    }
+    if (gsGetKeyTrigger(GKEY_DOWN)) {
+        --motion_num_;
+        owner_.change_motion(motion_num_, true);
+    };
+//if (gsGetKeyTrigger(GKEY_LEFT)) {
+//    --down_motion_num_;
+//    mesh_.change_motion(1, down_motion_num_);
+//};
+//if (gsGetKeyTrigger(GKEY_RIGHT)) {
+//    ++down_motion_num_;
+//    mesh_.change_motion(1, down_motion_num_);
+//};
     if (gsGetKeyTrigger(GKEY_I)) {
         owner_.change_motion(PlayerMotion::MotionIdle, false);
         owner_.change_state(PlayerState::Move);
     }
-    //デバッグ用:アニメーション番号確認
-    //owner_.change_motion(owner_.motion_num_, true);
 #endif // !DEBUG
 }
 //

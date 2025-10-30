@@ -17,6 +17,10 @@ public:
 	virtual void on_exit() override;
 private:
 	Player& owner_;
+	// Debug:デバッグ用モーション番号
+	int motion_num_{};
+	int up_motion_num_{};
+	int down_motion_num_{};
 };
 #endif
 

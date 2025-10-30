@@ -10,9 +10,9 @@ void PlayerAttackState::on_enter() {
 }
 //ステートが実行中に毎フレーム呼ばれる
 void PlayerAttackState::on_update(float delta_time) {
-	owner_.move(delta_time, status_.move_speed_);
 	if (owner_.is_motion_end()) {
 		owner_.change_state(PlayerState::Move);
+		return;
 	}
 }
 //

@@ -9,7 +9,7 @@ PlayerBullet::PlayerBullet(IWorld* world, const GSvector3& position, const GSvec
 	// ワールドを設定
 	world_ = world;
 	// タグ名
-	tag_ = "PlayerBulletTag";
+	tag_ = "PlayerAttackTag";
 	// アクター名
 	name_ = "PlayerBullet";
 	// 移動量の初期化
