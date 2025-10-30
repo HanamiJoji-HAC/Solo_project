@@ -1,10 +1,13 @@
 #include <GSGame.h>
 #include "Scene/SceneManager.h"
 #include "Scene/GamePlayScene.h"
+#include "GameConfig.h"
+
 class MyGame : public gslib::Game {
 public:
     // コンストラクタ
-    MyGame() : gslib::Game{ 1920, 1080 } {
+    MyGame(int screen_width, int screen_height, bool enable_full_screen, float target_refresh_rate)
+        : gslib::Game{ screen_width, screen_height, enable_full_screen, target_refresh_rate } {
     }
     // 開始
     void start() override {
@@ -27,8 +30,13 @@ public:
 private:
     // シーンマネージャー
     SceneManager scene_manager_;
+
 };
 
 int main() {
-	return MyGame().run();
+#ifdef _DEBUG
+    return MyGame(1920, 1080, false, cREF).run();
+#else
+    return MyGame(1920, 1080, true, cREF).run();
+#endif
 }
