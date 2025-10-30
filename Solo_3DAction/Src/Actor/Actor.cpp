@@ -40,6 +40,9 @@ void Actor::die() {
 	dead_ = true;
 }
 
+// €–S’†
+bool Actor::is_dying() { return false; }
+
 // Õ“Ë‚µ‚Ä‚¢‚é‚©H
 bool Actor::is_collide(const Actor& other) const {
 	return collider().intersects(other.collider());
@@ -99,9 +102,3 @@ GSvector3 Actor::velocity() const {
 BoundingSphere Actor::collider() const {
 	return collider_.transform(transform_.localToWorldMatrix());
 }
-
-//d—ÍŒvZ‚ğ‚·‚é
-//void Actor::updateGravity(float delta_time, float grav) {
-//	if (is_ground) return;
-//	velocity_.y += delta_time * grav;
-//}

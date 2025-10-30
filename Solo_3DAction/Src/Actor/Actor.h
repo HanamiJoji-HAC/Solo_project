@@ -36,8 +36,8 @@ public:
 	void collide(Actor& other);
 	// €–S‚·‚é
 	void die();
-	// d—Í
-	//void updateGravity(float delta_time, float grav);
+	// €–S’†
+	virtual bool is_dying();
 	// Õ“Ë‚µ‚Ä‚¢‚é‚©H
 	bool is_collide(const Actor& other) const;
 	// €–S‚µ‚Ä‚¢‚é‚©H
