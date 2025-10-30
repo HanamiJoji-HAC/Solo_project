@@ -54,3 +54,8 @@ bool StateMachine::is_current_state(int state_num) const {
 	return current_state_num_ == state_num;
 };
 
+//現在のステートを参照する
+int StateMachine::get_current_state() {
+	return current_state_num_;
+}
+

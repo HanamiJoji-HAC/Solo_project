@@ -29,6 +29,8 @@ public:
 	void late_update(float delta_time);
 	//初期化
 	void clear();
+	//現在のステートを参照する
+	int get_current_state();
 protected:
 	std::unordered_map<int, std::shared_ptr<IState>> state_list_;
 	int current_state_num_{ 0 };
