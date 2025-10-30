@@ -22,6 +22,8 @@ public:
 private:
     // ワールドクラス
     World   world_;
+    // シーンが終了しているか？
+    bool is_end_{ false };
 };
 
 #endif
