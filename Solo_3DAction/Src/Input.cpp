@@ -65,7 +65,7 @@ bool Input::get_action_input(InputAction action) {
 	case InputAction::BOOST:
 		return gsGetKeyState(GKEY_SPACE);
 	case InputAction::ATTACK:
-		return gsGetMouseButtonTrigger(GMOUSE_BUTTON_2);
+		return gsGetMouseButtonTrigger(GMOUSE_BUTTON_1);
 	case InputAction::UP:
 		return left_dir <= 90 && left_dir >= 0 && gsGetKeyState(GKEY_W);
 	case InputAction::RIGHT:
@@ -82,6 +82,8 @@ bool Input::get_action_input(InputAction action) {
 		return right_dir < -90 || right_dir >= 180 && gsGetKeyState(GKEY_LEFT);
 	case InputAction::L_LEFT:
 		return right_dir < 0 && right_dir >= -90 && gsGetKeyState(GKEY_RIGHT);
+	case InputAction::FIRE:
+		return gsGetMouseButtonTrigger(GMOUSE_BUTTON_2);
 	default:
 		return false;
 	}
