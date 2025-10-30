@@ -15,7 +15,6 @@ public:
 public:
 	Actor* get_player() const;
 	void tpp_normal(Actor* other, float delta_time);
-	bool start_debug{ false };
 	void update_camera_rotation(GSvector2 stickInput, float deltaTime, float sensitivity,
 		float& pitch, float& yaw);
 private:
