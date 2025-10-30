@@ -1,6 +1,8 @@
 #ifndef PLAYER_BULLET_H_
 #define PLAYER_BULLET_H_
 #include "Actor/Actor.h"
+#include "Rendering/AnimatedMesh.h"
+#include "Assets.h"
 
 // プレーヤーの弾クラス
 class PlayerBullet : public Actor {
@@ -16,5 +18,7 @@ public:
 private:
 	// 寿命
 	float lifespan_timer_;
+	//アニメーションメッシュ
+	AnimatedMesh mesh_;
 };
 #endif
