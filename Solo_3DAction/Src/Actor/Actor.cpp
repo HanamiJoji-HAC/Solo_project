@@ -101,7 +101,7 @@ BoundingSphere Actor::collider() const {
 }
 
 //d—ÍŒvZ‚ğ‚·‚é
-void Actor::updateGravity(float delta_time, float grav) {
-	if (is_ground) return;
-	velocity_.y += delta_time * grav;
-}
+//void Actor::updateGravity(float delta_time, float grav) {
+//	if (is_ground) return;
+//	velocity_.y += delta_time * grav;
+//}

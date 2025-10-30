@@ -37,8 +37,8 @@ const float Gravity{ -0.016f };
 
 // コンストラクタ
 Enemy::Enemy(IWorld* world, const GSvector3& position) :
-	mesh_{ Mesh_Enemy, MotionIdle, true },
-	motion_{ MotionIdle },
+	mesh_{ Mesh_Enemy, Mesh_Enemy, Mesh_Enemy, MotionIdle, true },
+	motion_{ MotionIdle }, 
 	motion_loop_{ true },
 	state_{ State::Idle },
 	state_timer_{ 0.0f },
