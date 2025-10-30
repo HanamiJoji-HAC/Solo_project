@@ -20,11 +20,8 @@ private:
 	Player& owner_;
 	//インスタンスを取得
 	Input& input_ = Input::get_instance();
-	//重力
-	float grav_{};
 	//移動入力値
 	float left_stick_angle{};
-	float move_speed_{ 0.0f };
-	Status& status_ = owner_.get_status();
+	Status& owner_status_ = owner_.get_status();
 };
 #endif
