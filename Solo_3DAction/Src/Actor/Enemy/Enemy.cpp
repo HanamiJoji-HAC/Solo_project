@@ -91,7 +91,7 @@ void Enemy::react(Actor& other) {
 	// ダメージ中またはダウン中の場合は何もしない
 	if (state_ == State::Damage || state_ == State::Down) return;
 	// プレーヤーの弾に衝突したら
-	if (other.tag() == "PlayerBulletTag") {
+	if (other.tag() == "PlayerAttackTag") {
 		// 体力を減らす
 		health_--;
 		if (health_ <= 0) {
