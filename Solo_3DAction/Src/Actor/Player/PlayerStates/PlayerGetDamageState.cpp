@@ -11,6 +11,7 @@ void PlayerGetDamageState::on_enter() {
 void PlayerGetDamageState::on_update(float delta_time) {
     if (owner_.is_motion_end()) {
         owner_.change_state(PlayerState::Move);
+        owner_.set_invisible(true, owner_status_.default_inbisible_timer_);
     }
 }
 //
