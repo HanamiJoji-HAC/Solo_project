@@ -137,11 +137,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Actor\Charactor.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
+    <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerBoostState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerDeadState.cpp" />
+    <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerGetDamageState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerIdleState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerJumpState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerMoveState.cpp" />
+    <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerStunState.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -162,12 +166,15 @@
     <ClCompile Include="Src\State\StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Actor\Charactor.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAttackState.h" />
+    <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerBoostState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerDeadState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerGetDamageState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerJumpState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerMoveState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerStunState.h" />
+    <ClInclude Include="Src\GameConfig.h" />
     <ClInclude Include="Src\Input.h" />
     <ClInclude Include="Src\Scene\GamePlayScene.h" />
     <ClInclude Include="Src\Actor\Player\Player.h" />
