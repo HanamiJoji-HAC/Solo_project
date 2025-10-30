@@ -39,8 +39,10 @@ void GamePlayScene::start() {
 // 更新
 void GamePlayScene::update(float delta_time) {
     world_.update(delta_time);
-    if (gsGetKeyTrigger(GKEY_C)) {
+    // Todo:ゲームクリア条件に変更する(現状はプレイヤーまたは敵の全滅)
+    if (world_.count_actor_with_tag("PlayerTag") <= 0 || world_.count_actor_with_tag("EnemyTag") <= 0) {
         is_end_ = true;
+        return;
     }
 }
 
