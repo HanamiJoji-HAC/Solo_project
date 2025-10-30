@@ -10,7 +10,7 @@ const float MaxSpeed{ 20.0f }; // 移動スピードの最大値
 // カメラの注視点の補正値
 const GSvector3 ReferencePointOffset{ 0.0f, 1.0f, 0.0f };
 // プレーヤーからの相対座標
-const GSvector3 PlayerOffset{ 0.0f, 3.0f, -5.0f };
+const GSvector3 PlayerOffset{ 0.0f, 2.0f, -5.0f };
 const float Sencitivity{ 2.0f };
 // コンストラクタ
 CameraTPS::CameraTPS(IWorld* world, const GSvector3& position, const GSvector3& at) {
@@ -39,13 +39,6 @@ void CameraTPS::update(float delta_time) {
 	ImGui::DragFloat3("position", PlayerOffset);
 	ImGui::End();
 #endif // !DEBUG
-
-	if (gsGetKeyTrigger(GKEY_I)) {
-		start_debug = true;
-		return;
-	}
-
-	if (start_debug) return;
 
 	tpp_normal(player, delta_time);
 }
