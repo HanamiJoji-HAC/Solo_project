@@ -1,12 +1,12 @@
-#ifndef PLAYER_MOVE_STATE
-#define PLAYER_MOVE_STATE
+#ifndef PLAYER_FIRE_STATE
+#define PLAYER_FIRE_STATE
 
 #include "State/IState.h"
 #include "../Player.h"
 #include "Input.h"
-class PlayerMoveState : public IState {
+class PlayerFireState : public IState {
 public:
-	PlayerMoveState(Player& owner);
+	PlayerFireState(Player& owner);
 	//ステートが開始された時に起こる
 	virtual void on_enter() override;
 	//ステートが実行中に毎フレーム呼ばれる
@@ -20,8 +20,6 @@ private:
 	Player& owner_;
 	//インスタンスを取得
 	Input& input_ = Input::get_instance();
-	//移動入力値
-	float left_stick_angle{};
 	Status& owner_status_ = owner_.get_status();
 };
 #endif
