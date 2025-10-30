@@ -4,6 +4,7 @@
 enum {           // メッシュデータ
 	Mesh_Player, // プレイヤー
 	Mesh_Enemy,  // 敵
+	Mesh_Bullet,
 };
 
 enum {							// オクトリーデータ
