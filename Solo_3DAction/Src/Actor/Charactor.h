@@ -10,16 +10,19 @@ struct Status
 {
 	// ステータス構造体
 	Status(
-		int hp_				 = 50,
-		float energy_		 = 100,
-		float max_energy_	 = 100,
-		int melee_atk_		 = 5,
-		int ranged_atk_		 = 1,
-		float jump_power_	 = 0.20f,
-		float boost_speed_	 = 4.0f,
-		float walk_speed_	 = 5.0f,
-		float move_speed_	 = 5.0f,
-		float gravity_		 = -0.40f
+		int hp_ = 50,
+		float energy_ = 100,
+		float max_energy_ = 100,
+		int melee_atk_ = 5,
+		int ranged_atk_ = 1,
+		float jump_power_ = 0.20f,
+		float boost_speed_ = 4.0f,
+		float walk_speed_ = 5.0f,
+		float move_speed_ = 5.0f,
+		float gravity_ = -0.40f,
+		bool is_invisible_ = false,
+		float invisible_timer_ = 3.0f,
+		float default_inbisible_timer_ = 3.0f
 	) :
 		hp_{ hp_ },
 		energy_{ energy_ },
@@ -30,7 +33,10 @@ struct Status
 		boost_speed_{ boost_speed_ },
 		walk_speed_{ walk_speed_ },
 		move_speed_{ move_speed_ },
-		gravity_{ gravity_ }
+		gravity_{ gravity_ },
+		is_invisible_{ is_invisible_ },
+		invisible_timer_{ invisible_timer_ },
+		default_inbisible_timer_{ default_inbisible_timer_ }
 	{ }
 	int hp_{ 0 };
 	float energy_{ 0.0f };
@@ -42,6 +48,9 @@ struct Status
 	float walk_speed_{ 0.0f };
 	float move_speed_{ 0.0f };
 	float gravity_{ 0.0f };
+	bool is_invisible_{ false };
+	float invisible_timer_{ 0.0f };
+	float default_inbisible_timer_{ 0.0f };
 };
 class Charactor : public Actor {
 public:
@@ -52,6 +61,11 @@ public:
 	virtual void take_damage(Actor& other, int damage);
 	virtual void update_gravity(float delta_time, float grav);
 	virtual bool check_ground();
+	// 無敵を設定する
+	void set_invisible(bool is_invisible, float invisible_timer);
+	// 無敵を設定する（タイマー式）
+	void start_invisible(float delta_time);
+	bool is_invisible();
 protected:
 	virtual void collide_actor(Actor& other);
 	virtual void collide_field();
@@ -64,14 +78,12 @@ protected:
 protected:
 	// ステータスパラメータ
 	Status status_;
-	// 重力
-	//float gravity_{ -0.98f };
 	// 身長
-	float height_{ 1.5f };
+	float height_{ 1.0f };
+	// 自身の判定
+	float radius_{ 0.5f };
 	// 足元のオフセット
 	float foot_offset_{ 0.05f };
-	// 無敵時間
-	float inbisible_timer_{ 0.0f };
 	// 死亡判定
 	bool dead_{ false };
 	Input& input_ = Input::get_instance();

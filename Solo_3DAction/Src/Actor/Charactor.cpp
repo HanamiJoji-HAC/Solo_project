@@ -84,3 +84,20 @@ bool Charactor::check_ground() {
 void Charactor::generate_attack_collider() {}
 
 void Charactor::generate_bullet_collider() {}
+
+void Charactor::set_invisible(bool is_invisible, float invisible_timer) {
+    status_.invisible_timer_ = invisible_timer;
+    status_.is_invisible_ = is_invisible;
+}
+
+void Charactor::start_invisible(float delta_time) {
+    if (status_.invisible_timer_ <= 0) {
+        set_invisible(false, status_.default_inbisible_timer_);
+        return;
+    }
+    status_.invisible_timer_ -= (delta_time / cREF);
+}
+
+bool Charactor::is_invisible() {
+    return status_.is_invisible_;
+}
