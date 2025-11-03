@@ -11,6 +11,7 @@ void PlayerMoveState::on_update(float delta_time) {
 	owner_.move(delta_time, owner_status_.walk_speed_);
 #ifndef DEBUG
     ImGui::Begin("MoveState_LeftStickInput");
+    left_stick_angle = input_.get_left_stick_input_angle();
     ImGui::DragFloat("angle", &left_stick_angle);
     ImGui::End();
     //デバッグ用:アニメーション番号確認
@@ -47,11 +48,6 @@ void PlayerMoveState::on_update(float delta_time) {
         owner_.change_motion(0, PlayerMotion::MotionFire, false);
         owner_.change_state(PlayerState::Fire);
         return;
-    }
-    // 死亡
-    if (owner_.is_dying()) {
-        owner_.change_motion(PlayerMotion::MotionDead, false);
-        owner_.change_state(PlayerState::Dead);
     }
     // 使わないIdleステートにデバッグ挙動を追加する
 #ifndef DEBUG
