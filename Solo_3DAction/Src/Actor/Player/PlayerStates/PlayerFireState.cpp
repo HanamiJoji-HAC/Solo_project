@@ -11,6 +11,7 @@ void PlayerFireState::on_enter() {
 //ステートが実行中に毎フレーム呼ばれる
 void PlayerFireState::on_update(float delta_time) {
 	owner_.move(delta_time, owner_status_.walk_speed_);
+	// Todo:前回のステートに戻るを追加する
 	if (owner_.is_motion_end()) {
 		owner_.change_state(PlayerState::Move);
 		return;
