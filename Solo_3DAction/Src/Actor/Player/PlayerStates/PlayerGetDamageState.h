@@ -17,6 +17,6 @@ public:
 	virtual void on_exit() override;
 private:
 	Player& owner_;
-	Status& owner_status_ = owner_.get_status();
+	const Status& owner_status_ = owner_.get_status();
 };
 #endif
