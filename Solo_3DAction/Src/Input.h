@@ -30,10 +30,7 @@ public:
 	float get_right_stick_input_angle();
 	bool get_action_input(InputAction action);
 	static Input& get_instance();
-private:
-	GSvector2 left_stick_input_;
-	GSvector2 right_stick_input_;
-	InputAction button_input_;
+
 public:
 	//ÉRÉsÅ[ã÷é~
 	Input(const Input& other) = delete;

@@ -9,8 +9,9 @@
 // プレーヤークラス
 class Player : public Charactor {
 public:
-    // プレーヤーの状態(必ずInputAction、add_state、Motionに追加を行うこと。)
+    // プレーヤーの状態(必ずInputAction、add_state、Motion、current_state_to_stringに追加を行うこと。)
     enum class State {
+        Null,       // 空ステート
         Idle,       // 待機中
         Move,		// 移動中
         Attack,		// 攻撃中
@@ -22,20 +23,22 @@ public:
         AirMove,    // 空中移動中
         Boost,      // ブースト中
         Fire,       // 射撃中
+
     };
     // モーション番号
     enum class Motion {
-        MotionIdle = 37,            // アイドル
-        MotionDamage = 35,          // ダメージ
-        MotionAttack = 2,          // 攻撃
-        MotionJump = 40,            // ジャンプ
-        MotionWalkForward = 50,     // 歩き（前）
-        MotionWalkBack = 51,        // 歩き（後）
-        MotionWalkLeft = 53,        // 歩き（左）
-        MotionWalkRight = 54,       // 歩き（右）
-        MotionBoost = 34,           // 飛ぶ
-        MotionDead = 5,             // 死亡
-        MotionFire = 55,            // 射撃
+        MotionIdle          = 37,          // アイドル
+        MotionDamage        = 35,          // ダメージ
+        MotionAttack        = 2,           // 攻撃
+        MotionJump          = 40,          // ジャンプ
+        MotionWalkForward   = 50,          // 歩き（前）
+        MotionWalkBack      = 51,          // 歩き（後）
+        MotionWalkLeft      = 53,          // 歩き（左）
+        MotionWalkRight     = 54,          // 歩き（右）
+        MotionBoost         = 34,          // 飛ぶ
+        MotionDead          = 5,           // 死亡
+        MotionFire          = 55,          // 射撃
+        MotionAirIdle       = 18           // 空中アイドル
     };
 public:
     // コンストラクタ
@@ -54,7 +57,6 @@ public:
     // 射撃
     void fire();
     // ジャンプ
-    void jump();
     void set_jump(float jumpPower);
     // 移動
     void move(float delta_time,float move_speed) override;
@@ -87,12 +89,13 @@ public:
     const char* current_state_to_string(State state);
     // ステータスを参照する
     Status& get_status();
+    const AnimatedMesh& get_mesh();
+    int get_previous_state();
 public:
     //Tips:変数はプライベートにしてゲッターを作る
     //モーションデバッグ用
     GSuint up_motion_num_{};
     GSuint down_motion_num_{};
-    Input& input_ = Input::get_instance();
 private:
     float state_timer_{ 0 };
     //アニメーションメッシュ
@@ -105,6 +108,8 @@ private:
     bool motion_loop_;
     StateMachine statemachine_{};
     GSvector2 move_input_value_{};
+    // 入力クラス
+    Input& input_ = Input::get_instance();
 };
 using PlayerMotion = Player::Motion;
 using PlayerState = Player::State;

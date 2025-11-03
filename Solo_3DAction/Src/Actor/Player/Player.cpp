@@ -12,9 +12,11 @@
 #include "PlayerStates/PlayerStunState.h"
 #include "PlayerStates/PlayerBoostState.h"
 #include "PlayerStates/PlayerFireState.h"
-#include "imgui/imgui.h"
 #include "GameConfig.h"
-//Todo:コメントアウトに規則を持たせるw
+
+#include <algorithm>
+#include "imgui/imgui.h"
+//Todo:コメントアウトに規則を持たせる
 
 // コンストラクタ
 Player::Player(IWorld* world, const GSvector3& position, const Status& status) : Charactor(status),
@@ -52,6 +54,12 @@ void Player::update(float delta_time) {
 
     //接地チェック
     check_ground();
+
+    // 死亡
+    if (is_dying()) {
+        change_motion(PlayerMotion::MotionDead, false);
+        change_state(PlayerState::Dead);
+    }
 #ifndef DEBUG
     ImGui::Begin("Player_motion_state");
     auto motion = static_cast<int>(motion_);
@@ -133,6 +141,7 @@ void Player::react(Actor& other) {
 
 // 移動
 void Player::move(float delta_time, float move_speed) {
+    //Todo:斜め前入力時に正面走りアニメーションなので、回転してもいいと思う
     // Lスティックの入力情報を取得
     input_.get_left_stick_input_angle();
     // カメラの前方向ベクトルを取得
@@ -175,11 +184,6 @@ void Player::fire() {
     generate_bullet_collider();
 }
 
-// ジャンプ
-void Player::jump() {
-    transform_.translate(velocity_, GStransform::Space::World);
-}
-
 //ジャンプ力を設定
 void Player::set_jump(float jumpPower) {
     velocity_.y = jumpPower;
@@ -188,10 +192,12 @@ void Player::set_jump(float jumpPower) {
 
 // ブースト
 void Player::boost(float delta_time, float boost_power) {
+    // ブースト入力を保持
     int boost_input = input_.get_action_input(InputAction::BOOST);
-    velocity_.y = boost_power * (delta_time / cREF) * boost_input;
-    //アクションが実行されている間は持続的に上昇
-    transform_.translate(velocity_);
+    float boost_speed = boost_power * boost_input * (delta_time / cREF);
+    // Todo:加速度的な値でブーストしたい
+    //boost_speed = std::clamp(boost_speed, 0.0f, status_.max_boost_speed_);
+    velocity_.y = boost_speed;
 }
 
 // 攻撃判定の生成
@@ -295,12 +301,13 @@ const char*Player::current_state_to_string(State state) {
     case Player::State::AirIdle:    return "AirIdle";
     case Player::State::AirMove:    return "AirMove";
     case Player::State::Boost:      return "Boost";
+    case Player::State::Fire:      return "Fire";
     default:                        return "None";
     }
 }
 
 // ステータスを参照する
-Status& Player::get_status() {
+Status& Player::get_status(){
     return status_;
 }
 
@@ -324,4 +331,12 @@ void Player::change_motion(int layer,int motion, bool loop) {
     motion_ = (GSuint)motion;
     motion_loop_ = loop;
     mesh_.change_motion(layer, motion_, loop);
+}
+
+const AnimatedMesh& Player::get_mesh() {
+    return mesh_;
+}
+
+int Player::get_previous_state() {
+    return statemachine_.get_previous_state();
 }
