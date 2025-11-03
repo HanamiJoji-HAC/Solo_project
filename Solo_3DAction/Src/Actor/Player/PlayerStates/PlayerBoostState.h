@@ -16,7 +16,11 @@ public:
 	//ステート終了時に呼ばれる
 	virtual void on_exit() override;
 private:
+	// プレイヤーを取得
 	Player& owner_;
-	Status& status_ = owner_.get_status();
+	// オーナーのステータス
+	const Status& owner_status_ = owner_.get_status();
+	// 入力クラス
+	Input& input_ = Input::get_instance();
 };
 #endif
