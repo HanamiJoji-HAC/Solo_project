@@ -16,13 +16,15 @@ struct Status
 		int melee_atk_ = 5,
 		int ranged_atk_ = 1,
 		float jump_power_ = 0.20f,
-		float boost_speed_ = 4.0f,
+		float boost_speed_ = 5.0f,
 		float walk_speed_ = 5.0f,
 		float move_speed_ = 5.0f,
 		float gravity_ = -0.40f,
 		bool is_invisible_ = false,
 		float invisible_timer_ = 3.0f,
-		float default_inbisible_timer_ = 3.0f
+		float default_inbisible_timer_ = 3.0f,
+		float air_move_speed_ = 5.0f,
+		float max_boost_speed_ = 15.0f
 	) :
 		hp_{ hp_ },
 		energy_{ energy_ },
@@ -36,7 +38,9 @@ struct Status
 		gravity_{ gravity_ },
 		is_invisible_{ is_invisible_ },
 		invisible_timer_{ invisible_timer_ },
-		default_inbisible_timer_{ default_inbisible_timer_ }
+		default_inbisible_timer_{ default_inbisible_timer_ },
+		air_move_speed_{ air_move_speed_ },
+		max_boost_speed_{ max_boost_speed_ }
 	{ }
 	int hp_{ 0 };
 	float energy_{ 0.0f };
@@ -51,6 +55,8 @@ struct Status
 	bool is_invisible_{ false };
 	float invisible_timer_{ 0.0f };
 	float default_inbisible_timer_{ 0.0f };
+	float air_move_speed_{ 0.0f };
+	float max_boost_speed_{ 0.0f };
 };
 class Charactor : public Actor {
 public:
