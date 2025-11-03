@@ -29,13 +29,17 @@ public:
 	void late_update(float delta_time);
 	//初期化
 	void clear();
-	//現在のステートを参照する
+	//現在のステート番号を参照する
 	int get_current_state();
+	// 前回のステートを参照する
+	int get_previous_state();
 protected:
 	std::unordered_map<int, std::shared_ptr<IState>> state_list_;
 	int current_state_num_{ 0 };
+	int previous_state_num_{ 0 };
 private:
 	std::shared_ptr<IState> current_state_;
+	std::shared_ptr<IState> previous_state_;
 public:
 	//コピー禁止
 	StateMachine(const StateMachine& other) = delete;
