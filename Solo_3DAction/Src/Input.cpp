@@ -40,10 +40,9 @@ GSvector2 Input::get_right_stick_input_value() {
 	if (gsGetKeyState(GKEY_RIGHT)) {
 		right_stick_input.x += 1;
 	}
-	//right_stick_input_ = right_stick_input;
 	return right_stick_input;
 }
-//Todo:dirïœêîëùÇ‚Ç∑
+
 float Input::get_right_stick_input_angle() {
 	GSvector2 right_stick_input = get_right_stick_input_value();
 	float stick_angle = atan2(right_stick_input.x, right_stick_input.y);
@@ -71,7 +70,7 @@ bool Input::get_action_input(InputAction action) {
 	case InputAction::RIGHT:
 		return left_dir <= 180 && left_dir > 90 && gsGetKeyState(GKEY_D);
 	case InputAction::DOWN:
-		return left_dir < -90 || left_dir >= 180 && gsGetKeyState(GKEY_S);
+		return left_dir < -90 || left_dir > 180 && gsGetKeyState(GKEY_S);
 	case InputAction::LEFT:
 		return left_dir < 0 && left_dir >= -90 && gsGetKeyState(GKEY_A);
 	case InputAction::L_UP:
@@ -79,11 +78,11 @@ bool Input::get_action_input(InputAction action) {
 	case InputAction::L_RIGHT:
 		return right_dir <= 180 && right_dir > 90 && gsGetKeyState(GKEY_DOWN);
 	case InputAction::L_DOWN:
-		return right_dir < -90 || right_dir >= 180 && gsGetKeyState(GKEY_LEFT);
+		return right_dir < -90 || right_dir > 180 && gsGetKeyState(GKEY_LEFT);
 	case InputAction::L_LEFT:
 		return right_dir < 0 && right_dir >= -90 && gsGetKeyState(GKEY_RIGHT);
 	case InputAction::FIRE:
-		return gsGetMouseButtonTrigger(GMOUSE_BUTTON_2);
+		return gsGetMouseButtonState(GMOUSE_BUTTON_2);
 	default:
 		return false;
 	}
