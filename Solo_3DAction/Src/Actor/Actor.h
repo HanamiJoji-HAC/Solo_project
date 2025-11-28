@@ -8,6 +8,7 @@
 #include "World/Field.h"
 #include "World/IWorld.h"
 #include "Math/Line.h"
+#include "State/StateMachine.h"
 
 class IWorld; // ワールド抽象インターフェースの前方宣言
 
@@ -56,7 +57,6 @@ public:
 	GSvector3 velocity() const;
 	// 衝突判定データを取得
 	BoundingSphere collider() const;
-
 	// コピー禁止
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;
@@ -80,7 +80,10 @@ protected:
 	bool dead_{ false };
 	//重力値
 	float gravity{ -0.036f };
+	// 地上にいるか？
 	bool is_ground{ false };
+	// ステートマシン
+	StateMachine state_machine_;
 };
 
 #endif
