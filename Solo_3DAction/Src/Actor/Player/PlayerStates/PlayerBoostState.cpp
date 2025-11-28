@@ -11,14 +11,30 @@ void PlayerBoostState::on_update(float delta_time)
 	// ブースト
 	if (input_.get_action_input(InputAction::BOOST)) {
 		owner_.boost(delta_time, owner_status_.boost_speed_);
-		owner_.change_motion(0, PlayerMotion::MotionFire, false);
+		owner_.move(delta_time, owner_status_.air_move_speed_);
 	}
+	// 地上にいるか？
+	else if(owner_.check_ground()) {
+		owner_.change_state(PlayerState::Move);
+	}
+	// 空中にいるか？
 	else {
-		// 前回のステートに遷移
-		auto previous_state = owner_.get_previous_state();
-		owner_.change_state(static_cast<Player::State>(previous_state));
+		owner_.change_state(PlayerState::Jump);
+		return;
 	}
-	owner_.move(delta_time, owner_status_.air_move_speed_);
+
+	// 射撃
+	if (input_.get_action_input(InputAction::FIRE)) {
+		owner_.change_motion(0, PlayerMotion::MotionFire, false);
+		owner_.change_state(PlayerState::Fire);
+		//owner_.fire();
+		return;
+	}
+	// 地上ならデフォルトステートへ遷移
+	if (owner_.check_ground()) {
+		owner_.change_state(PlayerState::Move);
+		return;
+	}
 }
 //
 void PlayerBoostState::on_late_update(float delta_time) {

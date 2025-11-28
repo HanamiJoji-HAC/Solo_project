@@ -21,7 +21,7 @@ private:
 	// 入力クラス
 	Input& input_ = Input::get_instance();
 	//移動入力値
-	float left_stick_angle{};
+	//float left_stick_angle{};
 	// オーナーのステータス
 	const Status& owner_status_ = owner_.get_status();
 };
