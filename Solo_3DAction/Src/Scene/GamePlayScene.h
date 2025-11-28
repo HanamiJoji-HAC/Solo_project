@@ -3,6 +3,7 @@
 
 #include "IScene.h"
 #include "World/World.h"
+#include "Actor/Charactor.h"
 
 // ゲームプレイシーン
 class GamePlayScene : public IScene {
@@ -19,6 +20,8 @@ public:
     virtual std::string next() const override;
     // 終了
     virtual void end() override;
+    // Jsonファイルからステータス情報を取得する
+    Status lode_status_from_json(const std::string& file_path, const std::string& key);
 private:
     // ワールドクラス
     World   world_;
