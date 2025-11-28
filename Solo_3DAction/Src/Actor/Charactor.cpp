@@ -59,6 +59,20 @@ void Charactor::collide_field() {
         // 重力を初期化する
         velocity_.y = 0.0f;
     }
+    // 地面との衝突判定（線分との交差判定）
+    //GSvector3 position = transform_.position();
+    //Line line;
+    line.start = position + collider_.center;
+    line.end = position + GSvector3{ 0.0f, 2.0f, 0.0f };
+    //GSvector3 intersect; // 地面との交点
+    if (world_->field()->collide(line, &intersect)) {
+        // 交点の位置からy座標のみ補正する
+        //position.y = intersect.y;
+        // 座標を変更する
+        transform_.position(position);
+        // 重力を初期化する
+        velocity_.y = 0.0f;
+    }
 };
 
 bool Charactor::check_ground() {
@@ -87,10 +101,10 @@ void Charactor::generate_bullet_collider() {}
 
 void Charactor::set_invisible(bool is_invisible, float invisible_timer) {
     status_.invisible_timer_ = invisible_timer;
-    status_.is_invisible_ = is_invisible;
+    is_invisible_ = is_invisible;
 }
 
-void Charactor::start_invisible(float delta_time) {
+void Charactor::invisible(float delta_time) {
     if (status_.invisible_timer_ <= 0) {
         set_invisible(false, status_.default_inbisible_timer_);
         return;
@@ -99,5 +113,5 @@ void Charactor::start_invisible(float delta_time) {
 }
 
 bool Charactor::is_invisible() {
-    return status_.is_invisible_;
+    return is_invisible_;
 }
