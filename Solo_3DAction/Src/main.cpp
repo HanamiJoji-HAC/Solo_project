@@ -2,6 +2,7 @@
 #include "Scene/SceneManager.h"
 #include "Scene/GamePlayScene.h"
 #include "GameConfig.h"
+#include "Input.h"
 
 class MyGame : public gslib::Game {
 public:
@@ -17,6 +18,7 @@ public:
     // 更新
     void update(float delta_time) override {
         scene_manager_.update(delta_time);
+        input_.update(delta_time);
     }
     // 描画
     void draw() override {
@@ -30,6 +32,8 @@ public:
 private:
     // シーンマネージャー
     SceneManager scene_manager_;
+    // 入力
+    Input& input_ = Input::get_instance();
 
 };
 
