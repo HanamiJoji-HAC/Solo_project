@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Actor\Charactor.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\EnemyCannon.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerBoostState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerDeadState.cpp" />
@@ -146,7 +147,10 @@
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerIdleState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerJumpState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerMoveState.cpp" />
+    <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerQuickBoostState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerStunState.cpp" />
+    <ClCompile Include="Src\Camera\State\CameraLockOnState.cpp" />
+    <ClCompile Include="Src\Camera\State\CameraNormalState.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -158,6 +162,7 @@
     <ClCompile Include="Src\Collision\BoundingSphere.cpp" />
     <ClCompile Include="Src\Camera\CameraTPS.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Scene\TitleScene.cpp" />
     <ClCompile Include="Src\World\Field.cpp" />
     <ClCompile Include="Src\Light\Light.cpp" />
     <ClCompile Include="Src\UI\NumberTexture.cpp" />
@@ -168,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor\Charactor.h" />
+    <ClInclude Include="Src\Actor\Enemy\EnemyCannon.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAttackState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerBoostState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerDeadState.h" />
@@ -175,9 +181,13 @@
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerGetDamageState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerJumpState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerMoveState.h" />
+    <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerQuickBoostState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerStunState.h" />
+    <ClInclude Include="Src\Camera\State\CameraLockOnState.h" />
+    <ClInclude Include="Src\Camera\State\CameraNormalState.h" />
     <ClInclude Include="Src\GameConfig.h" />
     <ClInclude Include="Src\Input.h" />
+    <ClInclude Include="Src\Rendering\Layer.h" />
     <ClInclude Include="Src\Scene\GamePlayScene.h" />
     <ClInclude Include="Src\Actor\Player\Player.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerIdleState.h" />
@@ -189,6 +199,7 @@
     <ClInclude Include="Src\Collision\BoundingSphere.h" />
     <ClInclude Include="Src\Camera\CameraTPS.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Scene\TitleScene.h" />
     <ClInclude Include="Src\World\Field.h" />
     <ClInclude Include="Src\Scene\IScene.h" />
     <ClInclude Include="Src\World\IWorld.h" />
