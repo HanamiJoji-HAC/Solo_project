@@ -1,11 +1,13 @@
-#ifndef ENEMY_H_
-#define ENEMY_H_
+#ifndef ENEMY_CANNON_H_
+#define ENEMY_CANNON_H_
 
 #include "Actor/Actor.h"
+#include "Actor/Charactor.h"
+#include "State/StateMachine.h"
 #include "Rendering/AnimatedMesh.h"
 
 // 敵クラス
-class Enemy : public Actor {
+class EnemyCannon : public Charactor {
 public:
 	// 状態を表す列挙型
 	enum class State {
@@ -18,7 +20,7 @@ public:
 	};
 public:
 	// コンストラクタ
-	Enemy(IWorld* world, const GSvector3& position);
+	EnemyCannon(IWorld* world, const GSvector3& position, const Status& status);
 	// 更新
 	virtual void update(float delta_time) override;
 	// 描画

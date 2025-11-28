@@ -6,6 +6,7 @@
 #include "Rendering/AnimatedMesh.h"
 #include "State/StateMachine.h"
 #include "Input.h"
+#include "Camera/CameraTPS.h"
 // プレーヤークラス
 class Player : public Charactor {
 public:
@@ -23,22 +24,27 @@ public:
         AirMove,    // 空中移動中
         Boost,      // ブースト中
         Fire,       // 射撃中
-
+        QuickBoost, // クイックブースト中
     };
     // モーション番号
     enum class Motion {
-        MotionIdle          = 37,          // アイドル
-        MotionDamage        = 35,          // ダメージ
-        MotionAttack        = 2,           // 攻撃
-        MotionJump          = 40,          // ジャンプ
-        MotionWalkForward   = 50,          // 歩き（前）
-        MotionWalkBack      = 51,          // 歩き（後）
-        MotionWalkLeft      = 53,          // 歩き（左）
-        MotionWalkRight     = 54,          // 歩き（右）
-        MotionBoost         = 34,          // 飛ぶ
-        MotionDead          = 5,           // 死亡
-        MotionFire          = 55,          // 射撃
-        MotionAirIdle       = 18           // 空中アイドル
+        MotionIdle              = 37,          // アイドル
+        MotionDamage            = 35,          // ダメージ
+        MotionAttack            = 2,           // 攻撃
+        MotionJump              = 34,          // ジャンプ
+        MotionWalkForward       = 50,          // 歩き（前）
+        MotionWalkBack          = 51,          // 歩き（後）
+        MotionWalkLeft          = 53,          // 歩き（左）
+        MotionWalkRight         = 54,          // 歩き（右）
+        MotionBoost             = 18,          // ブースト
+        MotionDead              = 5,           // 死亡
+        MotionFire              = 55,          // 射撃
+        MotionAirIdle           = 18,          // 空中アイドル
+        MotionQuickBoostUp      = 7,
+        MotionQuickBoostDown    = 8,
+        MotionQuickBoostLeft    = 20,
+        MotionQuickBoostRight   = 22,
+        MotionLanding           = 19,
     };
 public:
     // コンストラクタ
@@ -62,6 +68,10 @@ public:
     void move(float delta_time,float move_speed) override;
     // ブースト
     void boost(float delta_time, float boost_power) override;
+    // クイックブースト
+    void quick_boost(float delta_time);
+    // クイックブーストの開始処理
+    void set_quick_boost(float boost_power);
     // 死亡中
     bool is_dying() override;
     // ステートを変更する
@@ -75,7 +85,9 @@ public:
     // モーションを変更する(レイヤー、番号指定)
     void change_motion(int layer, int motion, bool loop);
     // モーションは終了しているか？
-    bool is_motion_end();
+    bool is_motion_end(GSuint layer) const;
+    // モーションは終了しているか？(レイヤー指定無し)
+    bool is_motion_end() const;
 public:
     // 弾判定の生成
     void generate_bullet_collider() override;
@@ -89,27 +101,41 @@ public:
     const char* current_state_to_string(State state);
     // ステータスを参照する
     Status& get_status();
-    const AnimatedMesh& get_mesh();
+    // 前回のモーションを取得
+    GSuint get_prev_motion() const;
+    // 全開のステートを取得
     int get_previous_state();
+    // クイックブースト中か？
+    bool is_quick_boost() const;
 public:
     //Tips:変数はプライベートにしてゲッターを作る
     //モーションデバッグ用
     GSuint up_motion_num_{};
     GSuint down_motion_num_{};
 private:
+    float deceleration_ = 2.0f;
+    bool is_quick_boost_{ false };
     float state_timer_{ 0 };
-    //アニメーションメッシュ
+    // アニメーションメッシュ
     AnimatedMesh mesh_;
-    //状態
+    // 状態
     State state_{};
-    //モーション番号
+    // モーション番号
     GSuint motion_;
+    // 前回のモーション
+    GSuint prev_motion_{};
     //モーションのループ指定
     bool motion_loop_;
-    StateMachine statemachine_{};
-    GSvector2 move_input_value_{};
-    // 入力クラス
-    Input& input_ = Input::get_instance();
+    // ステートマシン
+    StateMachine state_machine_;
+    GSvector2 move_input_value_;
+    CameraTPS* camera_;
+    
+private:
+    // プレイヤーのモーションデバッグ
+    void Player_State_Debug();
+    // プレイヤーステータスデバッグ
+    void Player_Status_Debug();
 };
 using PlayerMotion = Player::Motion;
 using PlayerState = Player::State;

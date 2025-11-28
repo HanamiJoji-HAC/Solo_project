@@ -1,12 +1,11 @@
-#ifndef GAME_PLAY_SCENE_H_
-#define GAME_PLAY_SCENE_H_
+#ifndef TITLE_SCENE_H_
+#define TITLE_SCENE_H_
 
 #include "IScene.h"
 #include "World/World.h"
-#include "Actor/Charactor.h"
 
 // ゲームプレイシーン
-class GamePlayScene : public IScene {
+class TitleScene : public IScene {
 public:
     // 開始
     virtual void start() override;
@@ -20,8 +19,6 @@ public:
     virtual std::string next() const override;
     // 終了
     virtual void end() override;
-    // Jsonファイルからステータス情報を取得する
-    Status lode_status_from_json(const std::string& file_path, const std::string& key);
 private:
     // ワールドクラス
     World   world_;

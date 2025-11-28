@@ -5,6 +5,8 @@
 #include "Collision/AttackCollider.h"
 #include "Assets.h"
 
+#include "imgui/imgui.h"
+
 enum { // 敵のモーション番号
 	MotionIdle = 0, // アイドル
 	MotionWalk = 1, // 歩き
@@ -56,6 +58,8 @@ Enemy::Enemy(IWorld* world, const GSvector3& position) :
 	transform_.position(position);
 	// ワールド変換行列の初期化
 	mesh_.transform(transform_.localToWorldMatrix());
+
+	pos = transform_.position();
 }
 
 // 更新
@@ -64,10 +68,10 @@ void Enemy::update(float delta_time) {
 	player_ = world_->find_actor("Player");
 	// 状態の更新
 	update_state(delta_time);
-	// 重力を更新
-	velocity_.y += Gravity * delta_time;
-	// 重力を加える
-	transform_.translate(0.0f, velocity_.y, 0.0f);
+	 //重力を更新
+	//velocity_.y += Gravity * delta_time;
+	//// 重力を加える
+	//transform_.translate(0.0f, velocity_.y, 0.0f);
 	// フィールドとの衝突判定
 	collide_field();
 	// モーションを変更
@@ -76,6 +80,12 @@ void Enemy::update(float delta_time) {
 	mesh_.update(delta_time);
 	// 行列を設定
 	mesh_.transform(transform_.localToWorldMatrix());
+#ifndef DEBUG
+	ImGui::Begin("Enemy");
+	ImGui::DragFloat3("position", pos);
+	transform_.position(pos);
+	ImGui::End();
+#endif // !DEBUG
 }
 
 // 描画
