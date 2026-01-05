@@ -1,23 +1,13 @@
 #ifndef ENEMY_CANNON_H_
 #define ENEMY_CANNON_H_
 
-#include "Actor/Actor.h"
-#include "Actor/Charactor.h"
+#include "Actor/Enemy/EnemyBase.h"
+
 #include "State/StateMachine.h"
 #include "Rendering/AnimatedMesh.h"
 
 // 敵クラス
-class EnemyCannon : public Charactor {
-public:
-	// 状態を表す列挙型
-	enum class State {
-		Idle, // アイドル中
-		Walk, // 歩き中
-		Turn, // 振り向き中
-		Damage, // ダメージ中
-		Attack, // 攻撃中
-		Down // ダウン中
-	};
+class EnemyCannon : public EnemyBase {
 public:
 	// コンストラクタ
 	EnemyCannon(IWorld* world, const GSvector3& position, const Status& status);
@@ -25,11 +15,11 @@ public:
 	virtual void update(float delta_time) override;
 	// 描画
 	virtual void draw() const override;
+	// GUI描画
+	virtual void draw_gui() const override;
 	// 衝突リアクション
 	virtual void react(Actor& other) override;
 private:
-	// 状態の更新
-	void update_state(float delta_time);
 	// 状態の変更
 	void change_state(State state, GSuint motion, bool loop = true);
 	// アイドル状態中
@@ -50,13 +40,6 @@ private:
 	bool is_attack() const;
 	// 移動判定
 	bool is_walk() const;
-	// ターゲット方向の角度を求める（符号付き）
-	float target_signed_angle() const;
-	// ターゲット方向の角度を求める（符号なし）
-	float target_angle() const;
-	// ターゲットの距離を求める
-	float target_distance() const;
-
 	// フィールドとの衝突処理
 	void collide_field();
 	// アクターとの衝突処理
@@ -64,6 +47,7 @@ private:
 	// 攻撃判定を生成
 	void generate_attack_collider();
 private:
+	StateMachine state_machine_;
 	// アニメーションメッシュ
 	AnimatedMesh mesh_;
 	// モーション番号
@@ -78,7 +62,5 @@ private:
 	Actor* player_;
 	// 体力
 	int health_;
-
-	GSvector3 pos;
 };
 #endif
