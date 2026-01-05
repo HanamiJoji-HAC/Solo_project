@@ -22,10 +22,10 @@
 
 // コンストラクタ
 Player::Player(IWorld* world, const GSvector3& position, const Status& status) : Charactor(status),
-    mesh_{ Mesh_Player, Mesh_Player, Mesh_Player, (GSuint)Motion::MotionIdle, true, 2 },
-    motion_{ (GSuint)Motion::MotionIdle },
-    motion_loop_{ true },
-    state_timer_{ 0 } 
+mesh_{ Mesh_Player, Mesh_Player, Mesh_Player, (GSuint)Motion::MotionIdle, true, 2 },
+motion_{ (GSuint)Motion::MotionIdle },
+motion_loop_{ true },
+state_timer_{ 0 }
 {
     name_ = "Player";
     tag_ = "PlayerTag";
@@ -49,9 +49,6 @@ void Player::update(float delta_time) {
     // ステートの更新
     state_machine_.update(delta_time);
 
-    if (input_.get_action_input(InputAction::LOCK_ON)) {
-        camera_->lock_on_actor("EnemyTag");
-    }
     // 無敵状態
     if(is_invisible()) invisible(delta_time);
 
@@ -415,6 +412,7 @@ void Player::Player_Status_Debug() {
     ImGui::Begin("PlayerStatus");
     ImGui::DragFloat3("velocity", velocity_);
     ImGui::DragFloat3("position", transform_.position());
+    ImGui::DragFloat3("forward", transform().forward());
     ImGui::DragFloat3("rotation", transform().eulerAngles());
     ImGui::DragInt("hp", &status_.hp_);
     ImGui::DragInt("m_atk", &status_.melee_atk_);
