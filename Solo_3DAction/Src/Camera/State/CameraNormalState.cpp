@@ -1,5 +1,4 @@
 #include "CameraNormalState.h"
-
 CameraNormalState::CameraNormalState(CameraTPS& owner) : owner_{ owner } {};
 //ステートが開始された時に起こる
 void CameraNormalState::on_enter() {
@@ -8,7 +7,6 @@ void CameraNormalState::on_enter() {
 //ステートが実行中に毎フレーム呼ばれる
 void CameraNormalState::on_update(float delta_time) {
 	// プレーヤーを検索
-	owner_.find_actor("Player");
 	Actor* player = owner_.get_player();
 	if (player == nullptr) return;
 	// 通常カメラ処理
