@@ -125,7 +125,7 @@ bool Input::is_pad() const {
 	return is_pad_;
 }
 
-//インスタンスを取得
+// インプットクラスのインスタンスを取得
 Input& Input::get_instance() {
 	static Input self;
 	return self;
