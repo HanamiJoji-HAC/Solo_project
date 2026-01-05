@@ -17,5 +17,7 @@ public:
 	virtual void on_exit();
 private:
 	CameraTPS& owner_;
+	Input& input_ = Input::get_instance();
+	float sencitivity_;
 };
 #endif
