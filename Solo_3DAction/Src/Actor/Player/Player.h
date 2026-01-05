@@ -129,8 +129,6 @@ private:
     // ステートマシン
     StateMachine state_machine_;
     GSvector2 move_input_value_;
-    CameraTPS* camera_;
-    
 private:
     // プレイヤーのモーションデバッグ
     void Player_State_Debug();
