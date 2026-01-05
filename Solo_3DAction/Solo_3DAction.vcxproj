@@ -138,7 +138,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Actor\Charactor.cpp" />
-    <ClCompile Include="Src\Actor\Enemy\EnemyCannon.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerBoostState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerDeadState.cpp" />
@@ -173,7 +174,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor\Charactor.h" />
-    <ClInclude Include="Src\Actor\Enemy\EnemyCannon.h" />
+    <ClInclude Include="Src\Actor\Enemy\EnemyBase.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAttackState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerBoostState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerDeadState.h" />
