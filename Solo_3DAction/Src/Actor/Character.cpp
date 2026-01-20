@@ -1,23 +1,23 @@
-#include "Charactor.h"
+#include "Character.h"
 #include "GameConfig.h"
 
-Charactor::Charactor(const Status& status) : status_(status) {}
+Character::Character(const Status& status) : status_(status) {}
 
-void Charactor::take_damage(Actor& other, int damage) {
+void Character::take_damage(Actor& other, int damage) {
 	status_.hp_ = CLAMP(status_.hp_ - damage, 0, INT_MAX);
 }
 
-void Charactor::update_gravity(float delta_time, float gravity) {
+void Character::update_gravity(float delta_time, float gravity) {
 	velocity_.y += (delta_time / cREF) * gravity;
 	transform_.translate(0.0f, velocity_.y, 0.0f);
     collide_field();
 };
 
-void Charactor::move(float delta_time, float move_speed) {}
+void Character::move(float delta_time, float move_speed) {}
 
-void Charactor::boost(float delta_time, float boost_power) {}
+void Character::boost(float delta_time, float boost_power) {}
 
-void Charactor::collide_actor(Actor& other) {
+void Character::collide_actor(Actor& other) {
     // ｙ座標を除く座標を求める
     GSvector3 position = transform_.position();
     position.y = 0.0f;
@@ -36,7 +36,7 @@ void Charactor::collide_actor(Actor& other) {
     collide_field();
 };
 
-void Charactor::collide_field() {
+void Character::collide_field() {
     // 壁との衝突判定（球体との判定）
     GSvector3 center; // 押し戻し後の球体の中心座標
     if (world_->field()->collide(collider(), &center)) {
@@ -75,7 +75,7 @@ void Charactor::collide_field() {
     }
 };
 
-bool Charactor::check_ground() {
+bool Character::check_ground() {
     //地面との衝突判定(線分との交差判定)
     GSvector3 position = transform_.position();
     Line line;
@@ -95,16 +95,16 @@ bool Charactor::check_ground() {
     return false;
 }
 
-void Charactor::generate_attack_collider() {}
+void Character::generate_attack_collider() {}
 
-void Charactor::generate_bullet_collider() {}
+void Character::generate_bullet_collider() {}
 
-void Charactor::set_invisible(bool is_invisible, float invisible_timer) {
+void Character::set_invisible(bool is_invisible, float invisible_timer) {
     status_.invisible_timer_ = invisible_timer;
     is_invisible_ = is_invisible;
 }
 
-void Charactor::invisible(float delta_time) {
+void Character::invisible(float delta_time) {
     if (status_.invisible_timer_ <= 0) {
         set_invisible(false, status_.default_inbisible_timer_);
         return;
@@ -112,6 +112,6 @@ void Charactor::invisible(float delta_time) {
     status_.invisible_timer_ -= (delta_time / cREF);
 }
 
-bool Charactor::is_invisible() {
+bool Character::is_invisible() {
     return is_invisible_;
 }

@@ -1,5 +1,5 @@
-#ifndef CHARACTOR_H_
-#define CHARACTOR_H_
+#ifndef CHARACTER_H_
+#define CHARACTER_H_
 
 #include "Actor/Actor.h"
 #include "Collision/AttackCollider.h"
@@ -59,11 +59,11 @@ struct Status
 	float quick_boost_speed_{ 0.0f };
 };
 
-class Charactor : public Actor {
+class Character : public Actor {
 public:
-	Charactor(const Status& status);
+	Character(const Status& status);
 
-	virtual ~Charactor() = default;
+	virtual ~Character() = default;
 public:
 	virtual void take_damage(Actor& other, int damage);
 	virtual void update_gravity(float delta_time, float grav);
