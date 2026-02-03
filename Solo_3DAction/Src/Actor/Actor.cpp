@@ -102,3 +102,9 @@ GSvector3 Actor::velocity() const {
 BoundingSphere Actor::collider() const {
 	return collider_.transform(transform_.localToWorldMatrix());
 }
+
+TweenUnit& Actor::move_to(const GSvector3& to, float duration)
+{
+	return Tween::vector3(transform_.position(), to, duration,
+		[=](GSvector3 pos) {transform_.position(pos);  });
+}

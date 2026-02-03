@@ -23,7 +23,7 @@ public:
 	// 指定時間後に処理を実行する
 	static TweenUnit& dalay_call(float delta_time, std::function<void()> callback);
 	// 指定された名前のTweenをキャンセル(削除)する
-	static TweenUnit& cancel(const std::string& name);
+	static void cancel(const std::string& name);
 private:
 	// インスタンス生成禁止
 	Tween() = delete;

@@ -72,6 +72,7 @@ void CameraTPS::update(float delta_time) {
 	ImGui::DragFloat3("to_target_vector", target_to_player_);
 	ImGui::DragFloat3("desired_rotate_", desired_rotate_);
 	ImGui::DragFloat3("lock_on_offest", LockOnOffest);
+	ImGui::DragFloat("pitch", &angle_);
 	ImGui::End();
 #endif;
 }
@@ -109,6 +110,9 @@ void CameraTPS::stick_controll_camera(GSvector2 stick_input, float delta_time, f
 	// 感度・時間でスケーリング
 	yaw_ -= stick_input.x * sensitivity * delta_time;
 	pitch_ -= stick_input.y * sensitivity * delta_time;
+	const float pitchMin = -45.0f;
+	const float pitchMax = 59.0f;
+	pitch_ = std::clamp(pitch_, pitchMin, pitchMax);
 }
 
 // カメラ内に対象がいるか？
@@ -156,7 +160,6 @@ void CameraTPS::reset_target() {
 // アクターをロックオンする
 void CameraTPS::lock_on_actor(const std::string& tag) {
 	// 指定したタグを持つアクターを検索
-	// 参照ループだからちょっとだけ無茶しても大丈夫
 	auto actors = world_->find_actor_with_tag(tag);
 	// ターゲットとの距離
 	float to_target_distance = FLT_MAX;
@@ -178,8 +181,8 @@ void CameraTPS::lock_on_actor(const std::string& tag) {
 	}
 }
 
-void CameraTPS::find_actor(const std::string& player) {
-	player_ = world_->find_actor(player);
+void CameraTPS::find_actor(const std::string& player_str) {
+	player_ = world_->find_actor(player_str);
 }
 
 Actor* CameraTPS::get_player() const {
@@ -211,11 +214,12 @@ void CameraTPS::update_lockon(float delta_time) {
 	Actor* player = get_player();
 	// ロックオン対象の敵を取得
 	Actor* target = get_target();
-
+	// ヨーを設定する
 	set_lock_on_yaw(player, target,delta_time);
+	// ピッチを設定する
 	set_lock_on_pitch(player, target, delta_time);
 
-	// 注視点の位置を求める（プレーヤーの頭部の少し上あたりの座標）
+	// 注視点の位置を求める（プレーヤーの目線位置からターゲットに向く）
 	GSvector3 at = target->transform().position() + LockOnReferencePointOffset;
 	GSvector3 velocity = velocity_;
 	// 視点の位置を求める（プレーヤーの背後の座標）
@@ -276,8 +280,6 @@ void CameraTPS::set_lock_on_yaw(Actor* player, Actor* target, float delta_time) 
 	// プレイヤーの背後ベクトルを取得
 	GSvector3 back = GSvector3::back();
 
-	// ターゲットベクトルと後方ベクトルのなす角を算出する
-	float target_yaw = GSvector3::signedAngle(back, target_to_player);
 	// 180°~-180°の境界の補間値を算出する
 	float angle_diff = GSmathf::deltaAngle(yaw_, GSvector3::signedAngle(back, target_to_player));
 	// 補間時間(秒)
@@ -296,19 +298,22 @@ void CameraTPS::set_lock_on_pitch(Actor* player, Actor* target, float delta_time
 	target_to_player.x = 0;
 	target_to_player.z = 0;
 
+
 	// プレイヤーの背後ベクトルを取得
 	GSvector3 back = GSvector3::back();
 	// ImGui参照用
 	norma_forward_ = back;
-	// 後方ベクトルとターゲットとの角度の内積を取得する
-	// CHECK:鉛直成分のみのベクトルとのなす角は必ず直角になってしまうため、比較対象の平行成分とそろえる必要がある
-	GSvector3 target_angle = target_to_player + back;
-	float dot = GSvector3::dot(back, target_to_player);
-	// もし直角を超えた場合は反転する(なす角の値が180°になるため)
+
 	// ImGui参照用
-	target_to_player_ = target_angle;
+	//target_to_player_ = target_angle;
 	// ターゲットベクトルと後方ベクトルのなす角を算出する
-	pitch_ = GSmathf::lerp(pitch_, GSvector3::signedAngle(back, target_angle), 2.0f * delta_time/cREF);
+	//pitch_ = GSmathf::lerp(pitch_, GSvector3::signedAngle(back, target_angle), 4.0f * delta_time/cREF);
+
+	//GSvector3 target_angle = target_to_player + back;
+	float angle = GSvector3::signedAngle(back, target_to_player);
+	angle_ = angle;
+	const float speed = 2.0f;
+	pitch_ = angle * (speed * delta_time / cREF);
 	// ピッチを制限する
 	const float pitchMin = -45.0f;
 	const float pitchMax = 59.0f;

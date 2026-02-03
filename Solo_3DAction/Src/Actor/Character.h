@@ -58,30 +58,27 @@ struct Status
 	float max_boost_speed_{ 0.0f };
 	float quick_boost_speed_{ 0.0f };
 };
-
+// playerとそれに干渉するアクターのためのクラス
 class Character : public Actor {
 public:
 	Character(const Status& status);
 
 	virtual ~Character() = default;
 public:
-	virtual void take_damage(Actor& other, int damage);
-	virtual void update_gravity(float delta_time, float grav);
-	virtual bool check_ground();
-	// 無敵を設定する
-	void set_invisible(bool is_invisible, float invisible_timer);
-	// 無敵を設定する（タイマー式）
-	void invisible(float delta_time);
-	bool is_invisible();
+	virtual void take_damage(Actor& other, int damage);				// 相手の体力を減らす処理
+	virtual void update_gravity(float delta_time, float grav);		// 重力
+	virtual bool check_ground();									// 接地判定
+	void set_invisible(bool is_invisible, float invisible_timer); 	// 無敵を設定する
+	void invisible(float delta_time);								// 無敵を設定する（タイマー式）
+	bool is_invisible();											// 無敵中か？
 protected:
-	virtual void collide_actor(Actor& other);
-	virtual void collide_field();
-	virtual void generate_attack_collider();
-	virtual void generate_bullet_collider();
-	// 移動
-	virtual void move(float delta_time, float move_speed);
-	// ブースト
-	virtual void boost(float delta_time, float boost_power);
+	virtual void collide_actor(Actor& other);						// アクターとの衝突判定
+	virtual void collide_field();									// 床との衝突判定
+	virtual void collide_celling();									// 天井との衝突判定
+	virtual void generate_attack_collider();						// 攻撃判定の生成
+	virtual void generate_bullet_collider();						// 弾攻撃判定の生成
+	virtual void move(float delta_time, float move_speed);			// 移動
+	virtual void boost(float delta_time, float boost_power);		// ブースト
 protected:
 	// ステータスパラメータ
 	Status status_;
@@ -94,6 +91,9 @@ protected:
 	// 死亡判定
 	bool dead_{ false };
 	Input& input_ = Input::get_instance();
+	// 無敵中か？
 	bool is_invisible_{ false };
+	// DEBUG:天井に触れているか？
+	bool is_celling_{ false };
 };
 #endif

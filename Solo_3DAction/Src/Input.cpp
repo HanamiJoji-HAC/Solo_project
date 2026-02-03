@@ -34,7 +34,7 @@ void Input::set_right_stick_angle() {
 }
 
 //ƒ{ƒ^ƒ“‚Ì“ü—Í‚ğQÆ‚·‚é
-bool Input::get_action_input(InputAction action) {
+bool Input::get_action_input(InputAction action) const {
 	switch (action)
 	{
 	case InputAction::JUMP:

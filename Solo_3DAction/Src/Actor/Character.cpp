@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "GameConfig.h"
+#include "imgui/imgui.h"
 
 Character::Character(const Status& status) : status_(status) {}
 
@@ -45,35 +46,30 @@ void Character::collide_field() {
         // 補正後の座標に変更する
         transform_.position(center);
     }
-    // 地面との衝突判定（線分との交差判定）
+}
+
+void Character::collide_celling()
+{
     GSvector3 position = transform_.position();
     Line line;
+    // 天井との衝突判定
     line.start = position + collider_.center;
-    line.end = position + GSvector3{ 0.0f, -foot_offset_, 0.0f };
-    GSvector3 intersect; // 地面との交点
-    if (world_->field()->collide(line, &intersect)) {
-        // 交点の位置からy座標のみ補正する
-        position.y = intersect.y;
+    line.end = position + GSvector3{ 0.0f, height_, 0.0f };
+    GSvector3 intersect; // 天井との交点
+    bool is_celling = world_->field()->collide(line, &intersect);
+    if (is_celling) {
+        //交点の位置からy座標のみ補正する
+        position.y = intersect.y - height_;
         // 座標を変更する
         transform_.position(position);
         // 重力を初期化する
         velocity_.y = 0.0f;
     }
-    // 地面との衝突判定（線分との交差判定）
-    //GSvector3 position = transform_.position();
-    //Line line;
-    line.start = position + collider_.center;
-    line.end = position + GSvector3{ 0.0f, 2.0f, 0.0f };
-    //GSvector3 intersect; // 地面との交点
-    if (world_->field()->collide(line, &intersect)) {
-        // 交点の位置からy座標のみ補正する
-        //position.y = intersect.y;
-        // 座標を変更する
-        transform_.position(position);
-        // 重力を初期化する
-        velocity_.y = 0.0f;
-    }
-};
+    ImGui::Begin("CellingCheck");
+    ImGui::Text("is_celling: %s", is_celling ? "true" : "false");
+    ImGui::End();
+}
+;
 
 bool Character::check_ground() {
     //地面との衝突判定(線分との交差判定)

@@ -1,6 +1,8 @@
 #include "World.h"
 #include "Field.h"
 #include "Actor/Actor.h"
+#include <GSEffect.h>
+
 // デストラクタ
 World::~World() {
 	clear();
@@ -24,12 +26,16 @@ void World::update(float delta_time) {
 	light_->update(delta_time);
 	// タイマの更新
 	//timer_.update(delta_time);
+	// エフェクトの更新
+	gsUpdateEffect(delta_time);
 }
 
 //描画
 void World::draw() const {
 	// カメラの設定
 	camera_->draw();
+	// エフェクト用のカメラを設定
+	gsSetEffectCamera();
 	// ライトの設定
 	light_->draw();
 	// フィールドの描画
@@ -38,6 +44,8 @@ void World::draw() const {
 	actors_.draw();
 	// 半透明アクターの描画
 	actors_.draw_transparent();
+	// エフェクトの描画
+	gsDrawEffect();
 	// GUIの描画
 	actors_.draw_gui();
 	// スコアの描画

@@ -60,7 +60,7 @@ TweenUnit& Tween::dalay_call(float delta_time, std::function<void()> callback)
 	return *unit;
 }
 
-TweenUnit& Tween::cancel(const std::string& name)
+void Tween::cancel(const std::string& name)
 {
 	// ‘S‚Ä‚Ì€–Ú‚ğ‘–¸‚µ‚ÄA–¼‘O‚ªˆê’v‚µ‚½‚à‚Ì‚ğíœ‚·‚é
 	for (auto itr = units_.begin(); itr != units_.end();) {
