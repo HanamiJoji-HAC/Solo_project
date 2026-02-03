@@ -90,6 +90,7 @@ private:
 	GSvector3 euler_angle_{};
 	GSvector3 desired_rotate_{};
 	GSvector3 test_position_{};
+	float angle_{};
 };
 using CameraState = CameraTPS::State;
 using CameraAngleAxis = CameraTPS::AngleAxis;
