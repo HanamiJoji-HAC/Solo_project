@@ -3,8 +3,9 @@
 
 #include "IScene.h"
 #include "World/World.h"
-#include "Actor/Charactor.h"
-
+#include "Actor/Character.h"
+#include "Systems/LoadJson.h"
+#include "Actor/Enemy/Enemies/Helicopter/Propeller.h"
 // ゲームプレイシーン
 class GamePlayScene : public IScene {
 public:
@@ -20,13 +21,13 @@ public:
     virtual std::string next() const override;
     // 終了
     virtual void end() override;
-    // Jsonファイルからステータス情報を取得する
-    Status lode_status_from_json(const std::string& file_path, const std::string& key);
 private:
     // ワールドクラス
-    World   world_;
+    World world_;
     // シーンが終了しているか？
     bool is_end_{ false };
+    Propeller* propeller_{ nullptr };
+    LoadJson& json_ = LoadJson::get_instance();
 };
 
 #endif
