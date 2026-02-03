@@ -21,27 +21,31 @@
 //Todo:コメントアウトに規則を持たせる
 
 // コンストラクタ
-Player::Player(IWorld* world, const GSvector3& position, const Status& status) : Charactor(status),
-mesh_{ Mesh_Player, Mesh_Player, Mesh_Player, (GSuint)Motion::MotionIdle, true, 2 },
-motion_{ (GSuint)Motion::MotionIdle },
-motion_loop_{ true },
-state_timer_{ 0 }
+Player::Player(IWorld* world, const GSvector3& position, const Status& status) : Character(status),
+    mesh_{ Mesh_Player, Mesh_Player, Mesh_Player, (GSuint)Motion::MotionIdle, true, 2 },
+    motion_{ (GSuint)Motion::MotionIdle },
+    motion_loop_{ true },
+    state_timer_{ 0 }
 {
     name_ = "Player";
     tag_ = "PlayerTag";
     transform_.position(position);
+    transform_.rotate(0, 180, 0);
     world_ = world;
-    //衝突判定球の設定
+    // 衝突判定球の設定
     collider_ = BoundingSphere{ radius_, GSvector3{0.0f, height_ ,0.0f} };
-    //状態を設定
+    // 状態を設定
     add_state();
-    //初期状態を設定
+    // 初期状態を設定
     change_state(State::Move);
     // 下半身のボーンＩＤ
     static const GSuint lower_body_bone_id[] =
     { 0, 1, 2, 69, 70, 71, 72, 73, 74, 75, 76, 77 };
     // 下半身ボーンをレイヤー１に設定（それ以外の上半身ボーンはレイヤー０）
     mesh_.set_layer_indices(1, lower_body_bone_id, 12);
+    height_ = 2.0f;
+
+
 }
 
 // 更新
@@ -59,7 +63,7 @@ void Player::update(float delta_time) {
     }
 
     collide_field();
-
+    collide_celling();
     //接地チェック
     check_ground();
 

@@ -2,13 +2,13 @@
 #define PLAYER_H_
 
 #include "Actor/Actor.h"
-#include "Actor/Charactor.h"
+#include "Actor/Character.h"
 #include "Rendering/AnimatedMesh.h"
 #include "State/StateMachine.h"
 #include "Input.h"
 #include "Camera/CameraTPS.h"
 // プレーヤークラス
-class Player : public Charactor {
+class Player : public Character {
 public:
     // プレーヤーの状態(必ずInputAction、add_state、Motion、current_state_to_stringに追加を行うこと。)
     enum class State {
