@@ -1,9 +1,9 @@
 #include "Propeller.h"
-
 #include "EnemyHeilcoptor.h"
 #include "imgui/imgui.h"
 
-Propeller::Propeller(IWorld* world, const GSvector3& position)
+Propeller::Propeller(IWorld* world, const GSvector3& position, EnemyHeilcoptor* enemy_heil) :
+	heil_(enemy_heil)
 {
 	name_ = "EnemyHeilcoptor";
 	tag_ = "EnemyTag";
@@ -19,7 +19,8 @@ void Propeller::update(float delta_time)
 	ImGui::DragFloat("rotate_speed", &rotate_speed_);
 	ImGui::End();
 #endif
-	transform_.eulerAngles(transform_.eulerAngles() + GSvector3(0, rotate_speed_, 0) * delta_time);
+	transform_.rotate(0, rotate_speed_ * delta_time, 0);
+	transform_.position(heil_->transform().position());
 }
 
 void Propeller::draw() const
