@@ -1,10 +1,11 @@
 #ifndef ENEMY_BASE_H_
 #define ENEMY_BASE_H_
 
-#include "Actor/Charactor.h"
+#include "Actor/Character.h"
+#include "Systems/LoadJson.h"
 
 // エネミー用抽象基底クラス
-class EnemyBase : public Charactor {
+class EnemyBase : public Character {
 public:
 	// 状態クラス
 	enum class State {
@@ -18,43 +19,61 @@ public:
 		Dead,		// 死亡状態
 	};
 public:
-	// デフォルトコンストラクタ
-	EnemyBase() = default;
-	// デストラクタ
-	virtual ~EnemyBase() = default;
+	// コンストラクタ
+	EnemyBase(const Status status);
 public:
 	// 待機
 	virtual void Idle();
 	// 移動
-	void move(float delta_time, float move_speed) override;
+	virtual void move(float delta_time, float move_speed);
 	// 発射
-	virtual void Fire();
+	virtual void fire();
 	// プレイヤーを捜索
 	virtual void search();
 	// プレイヤーを追尾
 	virtual void chase(Actor* player);
 	// リロード
 	virtual void reload(float cool_time);
-
 protected:
 	// ステートを変更する
-	virtual void change_state(State state_num);
+	void change_state(State state_num);
+	// プレイヤーを検索する
+	void find_player(std::string player_str);
 	// ターゲット方向の角度を求める（符号付き）
 	float target_signed_angle() const;
 	// ターゲット方向の角度を求める（符号なし）
 	float target_angle() const;
 	// ターゲットの距離を求める
 	float target_distance() const;
+
+protected:
+	// 目的座標配列
+	std::vector<GSvector3> way_point_;
+	// 目的座標を初期化する
+	void clear_point();
+	// 目的座標を変更する
+	void change_point();
+	// 現在の目的座標を返却する
+	GSvector3 get_current_point() const;
+	// 到着しているか？
+	bool is_arrive() const;
+	// 現在の目的座標番号を返す
+	int get_current_point_num() const;
+private:
+	// 現在の目的座標
+	GSvector3 current_point_;
+	// 次の目的座標
+	GSvector3 next_point_;
+	// 到着判定距離
+	float arrive_distance_{ 0.1f };
+	int current_point_count_{ -1 };
 public:
 	// プレイヤーを取得する
-	void get_player() const;
+	Actor* get_player() const;
 private:
 	//	プレイヤー取得用
-	Actor* player_;
-public:
-	// コピー禁止
-	EnemyBase(const EnemyBase&) = delete;
-	EnemyBase& operator = (const EnemyBase&) = delete;
+	Actor* player_ = nullptr;
+	LoadJson& json_ = LoadJson::get_instance();
 };
 using EnemyState = EnemyBase::State;
 #endif
