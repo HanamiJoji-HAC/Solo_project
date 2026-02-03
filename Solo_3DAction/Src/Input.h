@@ -27,21 +27,23 @@ public:
 	Input() = default;
 	// デストラクタ
 	~Input() = default;
+	// インプットクラスのインスタンスを取得
+	static Input& get_instance();
+
 	void update(float delta_time);
 
 	// 左スティックの角度を設定
 	void set_left_stick_angle();
 	// 右スティックの角度を設定
 	void set_right_stick_angle();
-	bool get_action_input(InputAction action);
-	// インプットクラスのインスタンスを取得
-	static Input& get_instance();
 
 	// WASDキーによる移動値の更新
 	void update_WASD_axis();
 	// マウスの移動量の更新
 	void update_mouce_axis();
 public:
+	// ボタンの入力情報を取得
+	bool get_action_input(InputAction action) const;
 	// 左スティックの状態を取得
 	const GSvector2& get_left_stick_axis() const;
 	// 右スティックの状態を取得
@@ -64,4 +66,3 @@ public:
 	Input& operator = (const Input& other) = delete;
 };
 #endif
-
