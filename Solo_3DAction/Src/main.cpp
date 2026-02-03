@@ -3,6 +3,7 @@
 #include "Scene/GamePlayScene.h"
 #include "GameConfig.h"
 #include "Input.h"
+#include <GSEffect.h>
 
 class MyGame : public gslib::Game {
 public:
@@ -12,6 +13,9 @@ public:
     }
     // 開始
     void start() override {
+        // エフェクトの初期化
+        gsInitEffect();
+
         scene_manager_.add("GamePlayScene", new GamePlayScene());
         scene_manager_.change("GamePlayScene");
     }
@@ -28,6 +32,9 @@ public:
     void end() override {
         scene_manager_.end();
         scene_manager_.clear();
+
+        // エフェクトの終了
+        gsFinishEffect();
     }
 private:
     // シーンマネージャー
