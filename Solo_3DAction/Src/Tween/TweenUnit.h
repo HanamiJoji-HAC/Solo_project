@@ -35,6 +35,7 @@ enum class EaseType {
 	EaseInOutQuart,
 	EaseInOutQuint,
 	EaseInOutSine,
+	Punch,
 };
 
 // Tweenの動作の一つを管理するクラスの基底クラス
