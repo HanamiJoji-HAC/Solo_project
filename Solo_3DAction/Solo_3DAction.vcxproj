@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\gslib_2021\inc;$(ProjectDir)\Src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\gslib_2021\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\gslib_2021\inc;$(ProjectDir)\Src;C:\gseffect_2022\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\gslib_2021\lib;C:\gseffect_2022\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\gslib_2021\inc;$(ProjectDir)\Src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\gslib_2021\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\gslib_2021\inc;$(ProjectDir)\Src;C:\gseffect_2022\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\gslib_2021\lib;C:\gseffect_2022\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,8 +137,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Actor\Charactor.cpp" />
+    <ClCompile Include="Src\Actor\Character.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\Propeller.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilMoveState.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.cpp" />
     <ClCompile Include="Src\Actor\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerBoostState.cpp" />
@@ -164,6 +169,11 @@
     <ClCompile Include="Src\Camera\CameraTPS.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemy.cpp" />
     <ClCompile Include="Src\Scene\TitleScene.cpp" />
+    <ClCompile Include="Src\Systems\LoadJson.cpp" />
+    <ClCompile Include="Src\Tween\Tween.cpp" />
+    <ClCompile Include="Src\Tween\TweenUnit.cpp" />
+    <ClCompile Include="Src\Tween\ValueUnit.cpp" />
+    <ClCompile Include="Src\Tween\Vector3Unit.cpp" />
     <ClCompile Include="Src\World\Field.cpp" />
     <ClCompile Include="Src\Light\Light.cpp" />
     <ClCompile Include="Src\UI\NumberTexture.cpp" />
@@ -173,7 +183,12 @@
     <ClCompile Include="Src\State\StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Actor\Charactor.h" />
+    <ClInclude Include="Src\Actor\Character.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\Propeller.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilMoveState.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.h" />
     <ClInclude Include="Src\Actor\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAttackState.h" />
@@ -187,6 +202,8 @@
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerStunState.h" />
     <ClInclude Include="Src\Camera\State\CameraLockOnState.h" />
     <ClInclude Include="Src\Camera\State\CameraNormalState.h" />
+    <ClInclude Include="Src\External\json.hpp" />
+    <ClInclude Include="Src\External\json_fwd.hpp" />
     <ClInclude Include="Src\GameConfig.h" />
     <ClInclude Include="Src\Input.h" />
     <ClInclude Include="Src\Rendering\Layer.h" />
@@ -202,6 +219,11 @@
     <ClInclude Include="Src\Camera\CameraTPS.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemy.h" />
     <ClInclude Include="Src\Scene\TitleScene.h" />
+    <ClInclude Include="Src\Systems\LoadJson.h" />
+    <ClInclude Include="Src\Tween\Tween.h" />
+    <ClInclude Include="Src\Tween\TweenUnit.h" />
+    <ClInclude Include="Src\Tween\ValueUnit.h" />
+    <ClInclude Include="Src\Tween\Vector3Unit.h" />
     <ClInclude Include="Src\World\Field.h" />
     <ClInclude Include="Src\Scene\IScene.h" />
     <ClInclude Include="Src\World\IWorld.h" />
@@ -216,6 +238,9 @@
     <ClInclude Include="Src\State\IState.h" />
     <ClInclude Include="Src\State\StateMachine.h" />
     <ClInclude Include="Src\State\StateNull.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
