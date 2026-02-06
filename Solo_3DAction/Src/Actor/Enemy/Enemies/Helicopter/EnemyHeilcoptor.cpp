@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include "Propeller.h"
 #include "States/HeilMoveState.h"
+#include "States/HeilAttackState.h"
+#include "States/HeilSearchState.h"
 
 EnemyHeilcoptor::EnemyHeilcoptor(IWorld* world, const GSvector3& position, const Status& status, const std::vector<GSvector3> way_points) : EnemyBase{ status }
 {
@@ -35,11 +37,10 @@ void EnemyHeilcoptor::update(float delta_time)
 	ImGui::Begin("heil_debug");
 	ImGui::DragFloat3("velocity",velocity_);
 	ImGui::DragFloat3("position", transform_.position());
-	ImGui::DragFloat3("collider", collider_.center);
-	ImGui::DragFloat3("way1", way_point_[0]);
-	ImGui::DragFloat3("way2", way_point_[1]);
-	ImGui::DragFloat3("way3", way_point_[2]);
-	ImGui::DragFloat3("way4", way_point_[3]);
+	int current_waypoint = get_current_point_num();
+	ImGui::InputInt("waypoint", &current_waypoint);
+	int current_state = state_machine_.get_current_state();
+	ImGui::InputInt("NowState", &current_state);
 	ImGui::End();
 }
 
@@ -80,15 +81,13 @@ void EnemyHeilcoptor::move(float delta_time, float move_speed)
 	transform_.translate(velocity_, GStransform::Space::World);
 }
 
-void EnemyHeilcoptor::turn(float rotate_speed, float delta_time)
+void EnemyHeilcoptor::turn_to(const GSvector3& target_pos, float rotate_speed, float delta_time)
 {
-	// 回転値を取得する
-	float target_signed_angle = turn_angle();
-	// 角度の分だけ回転する
-	if (std::abs(target_signed_angle) <= 0.1f) return;
-	// 1フレームで回転できる最大角度
-	float max_rotate = rotate_speed * delta_time;
+	if (is_complete_turn(target_pos)) return;
+
 	// 回転値を設定する
+	float target_signed_angle = get_turn_angle(target_pos);
+	float max_rotate = rotate_speed * delta_time / cREF;
 	float rotation = std::clamp(
 		target_signed_angle,
 		-max_rotate,
@@ -98,37 +97,9 @@ void EnemyHeilcoptor::turn(float rotate_speed, float delta_time)
 	transform_.rotate(0.0f, rotation, 0.0f);
 }
 
-float EnemyHeilcoptor::turn_angle()
+bool EnemyHeilcoptor::search(float search_timer, float delta_time)
 {
-	// 現在の目的座標を取得
-	GSvector3 current_vector = get_current_point();
-	// 自身の座標から目的座標に向かうベクトルを取得
-	GSvector3 target_vector = current_vector - transform_.position();
-	// 現在の正面ベクトルを取得する
-	GSvector3 forward_vector = transform_.forward();
-	// y軸成分は考慮しない
-	target_vector.y = 0.0f;
-	forward_vector.y = 0.0f;
-	// 正規化
-	target_vector.normalized();
-	forward_vector.normalized();
-	// 自身の正面ベクトルと、目的ベクトルとの角度差を取得する
-	return GSvector3::signedAngle(forward_vector, target_vector);
-}
-
-
-
-void EnemyHeilcoptor::search()
-{
-	// 索敵距離
-	float search_distance = 10.0f;
-	// 索敵条件を満たすか？
-	auto is_search = [&]() -> bool {
-		return target_angle() > 30.0f && target_distance() > search_distance;
-	};
-
-	if (!is_search()) return;
-	change_state(State::Attack);
+	return false;
 }
 
 void EnemyHeilcoptor::fire()
@@ -138,7 +109,9 @@ void EnemyHeilcoptor::fire()
 
 void EnemyHeilcoptor::add_state()
 {
-	state_machine_.add_state((GSuint)State::Move, std::make_shared<HeilMoveState>(*this));
+	state_machine_.add_state((int)EnemyState::Move, std::make_shared<HeilMoveState>(*this));
+	state_machine_.add_state((int)EnemyState::Attack, std::make_shared<HeilAttackState>(*this));
+	state_machine_.add_state((int)EnemyState::Search, std::make_shared<HeilSearchState>(*this));
 }
 
 // 弾判定の生成
@@ -159,7 +132,61 @@ void EnemyHeilcoptor::generate_bullet_collider() {
 	world_->add_actor(new PlayerBullet{ world_, position, velocity });
 }
 
+bool EnemyHeilcoptor::is_complete_turn(GSvector3 target_pos)
+{
+	// 回転値を取得する
+	float target_signed_angle = get_turn_angle(target_pos);
+	// 回転が完了していたら終了
+	if (std::abs(target_signed_angle) <= 0.1f) {
+		is_complete_turn_ = true;
+		return true;
+	}
+	 return is_complete_turn_ = false;
+}
+
+float EnemyHeilcoptor::get_turn_angle(const GSvector3& target_pos)
+{
+	// 現在の目的座標を取得
+	GSvector3 current_vector = target_pos;
+	// 自身の座標から目的座標に向かうベクトルを取得
+	GSvector3 target_vector = current_vector - transform_.position();
+	// 現在の正面ベクトルを取得する
+	GSvector3 forward_vector = transform_.forward();
+	// y軸成分は考慮しない
+	target_vector.y = 0.0f;
+	forward_vector.y = 0.0f;
+	// 正規化
+	target_vector.normalized();
+	forward_vector.normalized();
+
+	// 回転値を返却する
+	return GSvector3::signedAngle(forward_vector, target_vector);
+}
+
+GSvector3 EnemyHeilcoptor::get_waypoint_pos() const
+{
+	return get_current_point();
+}
+
+bool EnemyHeilcoptor::is_search(float search_distance) const
+{
+	// 索敵条件を満たすか？
+	const float angle = target_angle();
+	const float distance = target_distance();
+	return angle < 15.0f && distance < search_distance;
+}
+
 const Status& EnemyHeilcoptor::get_status() const
 {
 	return status_;
+}
+
+void EnemyHeilcoptor::change_state(EnemyState state)
+{
+	state_machine_.change_state((int)state);
+}
+
+Actor* EnemyHeilcoptor::get_player()
+{
+	return find_player();
 }
