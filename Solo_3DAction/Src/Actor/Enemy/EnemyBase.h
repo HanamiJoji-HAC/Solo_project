@@ -17,6 +17,7 @@ public:
 		CoolTime,	// クールタイム状態
 		Stun,		// 気絶状態
 		Dead,		// 死亡状態
+		Search,		// 索敵状態
 	};
 public:
 	// コンストラクタ
@@ -29,16 +30,14 @@ public:
 	// 発射
 	virtual void fire();
 	// プレイヤーを捜索
-	virtual void search();
+	virtual bool search(float search_timer, float delta_time);
 	// プレイヤーを追尾
 	virtual void chase(Actor* player);
 	// リロード
 	virtual void reload(float cool_time);
 protected:
-	// ステートを変更する
-	void change_state(State state_num);
 	// プレイヤーを検索する
-	void find_player(std::string player_str);
+	Actor* find_player() const;
 	// ターゲット方向の角度を求める（符号付き）
 	float target_signed_angle() const;
 	// ターゲット方向の角度を求める（符号なし）
@@ -67,9 +66,6 @@ private:
 	// 到着判定距離
 	float arrive_distance_{ 0.1f };
 	int current_point_count_{ -1 };
-public:
-	// プレイヤーを取得する
-	Actor* get_player() const;
 private:
 	//	プレイヤー取得用
 	Actor* player_ = nullptr;

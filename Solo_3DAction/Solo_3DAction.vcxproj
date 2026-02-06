@@ -85,6 +85,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -100,6 +101,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +144,9 @@
     <ClCompile Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\Propeller.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilAttackState.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilMoveState.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilSearchState.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.cpp" />
     <ClCompile Include="Src\Actor\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
@@ -187,7 +191,9 @@
     <ClInclude Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\Propeller.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilAttackState.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilMoveState.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilSearchState.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.h" />
     <ClInclude Include="Src\Actor\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.h" />

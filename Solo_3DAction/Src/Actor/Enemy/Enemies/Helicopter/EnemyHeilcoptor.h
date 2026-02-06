@@ -22,18 +22,26 @@ public:
 	virtual void react(Actor& other) override;
 public:
 	// 索敵
-	virtual void search() override;
+	virtual bool search(float search_timier = 1.0f, float delta_time = 1.0f) override;
 	// 発射
 	virtual void fire() override;
 	// 移動
 	virtual void move(float delta_time, float move_speed) override;
 	// 方向転換
-	void turn(float rotate_speed, float delta_time);
-	// 回転値の取得
-	float turn_angle();
+	void turn_to(const GSvector3& target_pos, float rotate_speed, float delta_time);
 public:
+	// 回転は完了しているか？
+	bool is_complete_turn(GSvector3 target_pos);
+	// 回転量の取得
+	float get_turn_angle(const GSvector3& target_pos);
+	GSvector3 get_waypoint_pos() const;
+	// 索敵範囲内か？
+	bool is_search(float search_distance = 10.0f) const;
 	// ステータスを取得する
 	const Status& get_status() const;
+	// ステートを変更する
+	void change_state(EnemyState state);
+	Actor* get_player();
 private:
 	//	ステートの追加
 	void add_state();
@@ -44,5 +52,6 @@ private:
 	float state_timer_{ 0.0f };
 	// プロペラクラス
 	Propeller* propeller_{ nullptr };
+	bool is_complete_turn_{ false };
 };
 #endif

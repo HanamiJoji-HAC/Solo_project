@@ -17,7 +17,8 @@ void EnemyBase::fire() {
 }
 
 // プレイヤーを捜索
-void EnemyBase::search() {
+bool EnemyBase::search(float search_timer, float delta_time) {
+	return false;
 }
 
 // プレイヤーを追尾
@@ -28,17 +29,13 @@ void EnemyBase::chase(Actor* player) {
 void EnemyBase::reload(float cool_time) {
 }
 
-// ステートを変更する
-void EnemyBase::change_state(State state_num) {
-	state_machine_.change_state((int)state_num);
-}
-
 // ターゲット方向の角度を求める（符号付き）
 float EnemyBase::target_signed_angle() const {
+	const Actor* player = find_player();
 	// ターゲットがいなければ0を返す
-	if (player_ == nullptr) return 0.0f;
+	if (player == nullptr) return 0.0f;
 	// ターゲット方向のベクトルを求める
-	GSvector3 to_target = player_->transform().position() - transform_.position();
+	GSvector3 to_target = player->transform().position() - transform_.position();
 	// 前向き方向のベクトルを取得
 	GSvector3 forward = transform_.forward();
 	// ベクトルのy成分を無効にする
@@ -55,19 +52,15 @@ float EnemyBase::target_angle() const {
 	
 // ターゲットの距離を求める
 float EnemyBase::target_distance() const {
+	const Actor* player = find_player();
 	// ターゲットがいなければ最大距離を返す
-	if (player_ == nullptr) return FLT_MAX; // float型の最大値
+	if (player == nullptr) return FLT_MAX; // float型の最大値
 	// ターゲットとの距離を計算する
-	return GSvector3::distance(player_->transform().position(), transform_.position());
+	return GSvector3::distance(player->transform().position(), transform_.position());
 }
 
-void EnemyBase::find_player(std::string player_str) {
-	world_->find_actor(player_str);
-}
-
-// プレイヤーを取得する
-Actor* EnemyBase::get_player() const {
-	return player_;
+Actor* EnemyBase::find_player() const {
+	return world_->find_actor("Player");
 }
 
 void EnemyBase::clear_point()
