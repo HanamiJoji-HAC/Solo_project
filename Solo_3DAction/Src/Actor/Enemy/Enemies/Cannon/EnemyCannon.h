@@ -38,8 +38,6 @@ private:
 	bool is_turn() const;
 	// 攻撃判定
 	bool is_attack() const;
-	// 移動判定
-	bool is_walk() const;
 	// フィールドとの衝突処理
 	void collide_field();
 	// アクターとの衝突処理
