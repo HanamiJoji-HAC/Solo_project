@@ -15,6 +15,7 @@ public:
 		Null,       // 空ステート
 		Normal,		// 通常ステート
 		LockOn,		// ロックオンステート
+		Reset,		// リセットステート
 	};
 	// アングル
 	enum class AngleAxis {
@@ -29,7 +30,7 @@ public:
 	// 描画
 	virtual void draw() const override;
 public:
-	void set_camera(Actor* player, float delta_time);
+	void update_normal(Actor* player, float delta_time);
 	// 通常カメラ操作
 	void tpp_normal(Actor* other, float delta_time);
 	// ヨー・ピッチを計算する
@@ -46,27 +47,39 @@ public:
 	void find_actor(const std::string& player);
 	// ロックオン
 	void update_lockon(float delta_time);
-	GSvector3 get_yaw_pitch() const;
 	// ロックオン時のヨーを設定
 	void set_lock_on_yaw(Actor* player, Actor* target, float delta_time);
 	// ロックオン時のピッチを設定
 	void set_lock_on_pitch(Actor* player, Actor* target, float delta_time);
-public:
 	// ステートの変更
 	void change_state(State state_num);
 	// ステートの追加
 	void add_state();
+public:
+	// ヨーとピッチを取得する
+	GSvector3 get_yaw_pitch() const;
 	// プレイヤー情報を取得
 	Actor* get_player() const;
 	// ターゲット情報を取得
 	Actor* get_target() const;
-	GSvector3 get_target_vector() const;
 	// ロックオン状態か？
 	bool is_lock_on() const;
 	// リセット中か？
 	bool is_reset() const;
 	// 感度倍率を取得
 	float get_senc() const;
+
+private:
+	// ラジアンを角度に変換する
+	float rad2deg(float rad);
+	// 符号付き2点間のベクトルと正面ベクトルとの角度差を算出する
+	float forward_angle_diff(GSvector3 target_vector);
+	// 現在のステートを文字列で取得する
+	const char* current_state_to_string(State state);
+	// ヨーの範囲を設定する
+	float wrap_yaw(float yaw);
+	// 1オフセット値を設定する
+	GSvector3 set_offset(State& state);
 private:
 	// 入力クラス
 	Input& input_ = Input::get_instance();
@@ -76,21 +89,16 @@ private:
 	float yaw_{ 0.0f };
 	// ピッチ
 	float pitch_{ 0.0f };
-	// ターゲットの対象
-	Actor* target_ = nullptr;
+	// ターゲット
+	Actor* target_{ nullptr };
 	// プレーヤー
-	Actor* player_;
-	// ターゲットとのベクトル
-	GSvector3 target_to_player_;
+	Actor* player_{ nullptr };
+	// ロックオン中か？
+	bool is_lock_on_{ false };
+	// リセット中か？
 	bool is_reset_{ false };
-	// HACK:
-	float to_target_distance_;
-	GSvector3 actor_position_;
-	GSvector3 norma_forward_;
-	GSvector3 euler_angle_{};
-	GSvector3 desired_rotate_{};
-	GSvector3 test_position_{};
-	float angle_{};
+	// オフセット値
+	GSvector3 player_offset_{};
 };
 using CameraState = CameraTPS::State;
 using CameraAngleAxis = CameraTPS::AngleAxis;

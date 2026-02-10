@@ -1,12 +1,12 @@
-#ifndef CAMERA_LOCK_ON_STATE_H_
-#define CAMERA_LOCK_ON_STATE_H_
+#ifndef CAMERA_RESET_STATE_H_
+#define CAMERA_RESET_STATE_H_
 
 #include "State/IState.h"
 #include "../CameraTPS.h"
 
-class CameraLockOnState : public IState {
+class CameraResetState : public IState {
 public:
-	CameraLockOnState(CameraTPS& owner);
+	CameraResetState(CameraTPS& owner);
 	//ステートが開始された時に起こる
 	virtual void on_enter();
 	//ステートが実行中に毎フレーム呼ばれる
@@ -18,6 +18,5 @@ public:
 private:
 	CameraTPS& owner_;
 	Input& input_ = Input::get_instance();
-	float sencitivity_{ 0.0f };
 };
 #endif
