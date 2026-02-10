@@ -11,7 +11,7 @@ void CameraNormalState::on_update(float delta_time) {
 	if (player == nullptr) return;
 	// 通常カメラ処理
 	owner_.tpp_normal(player, delta_time);
-	// HACK:ロックオンカメラ
+	// ロックオンに移行
 	if (input_.get_action_input(InputAction::LOCK_ON)) {
 		owner_.change_state(CameraState::LockOn);
 	}
