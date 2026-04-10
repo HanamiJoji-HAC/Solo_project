@@ -16,4 +16,3 @@ public:
 	virtual void on_exit() override {}
 };
 #endif
-
