@@ -6,6 +6,8 @@
 #include "States/HeilAttackState.h"
 #include "States/HeilSearchState.h"
 
+#include "Gun/Guns/MachineGun/MachineGun.h"
+
 EnemyHeilcoptor::EnemyHeilcoptor(IWorld* world, const GSvector3& position, const Status& status, const std::vector<GSvector3> way_points) : EnemyBase{ status }
 {
 	name_ = "EnemyHeilcoptor";
@@ -29,6 +31,8 @@ EnemyHeilcoptor::EnemyHeilcoptor(IWorld* world, const GSvector3& position, const
 	add_state();
 	// èâä˙ÉXÉeÅ[ÉgÇÃê›íË
 	change_state(State::Move);
+	// èeÇìoò^Ç∑ÇÈ
+	add_gun();
 }
 
 void EnemyHeilcoptor::update(float delta_time)
@@ -97,14 +101,24 @@ void EnemyHeilcoptor::turn_to(const GSvector3& target_pos, float rotate_speed, f
 	transform_.rotate(0.0f, rotation, 0.0f);
 }
 
+void EnemyHeilcoptor::chase_bullet()
+{
+	Actor* player = get_player();
+}
+
+void EnemyHeilcoptor::add_gun()
+{
+	guns_.add_gun(new MachineGun(world_, BulletInfo::Normal));
+}
+
 bool EnemyHeilcoptor::search(float search_timer, float delta_time)
 {
 	return false;
 }
 
-void EnemyHeilcoptor::fire()
+void EnemyHeilcoptor::fire(GunInfo::Gun_ID gun_id)
 {
-	generate_bullet_collider();
+	guns_.fire(gun_id, this);
 }
 
 void EnemyHeilcoptor::add_state()
@@ -112,24 +126,6 @@ void EnemyHeilcoptor::add_state()
 	state_machine_.add_state((int)EnemyState::Move, std::make_shared<HeilMoveState>(*this));
 	state_machine_.add_state((int)EnemyState::Attack, std::make_shared<HeilAttackState>(*this));
 	state_machine_.add_state((int)EnemyState::Search, std::make_shared<HeilSearchState>(*this));
-}
-
-// íeîªíËÇÃê∂ê¨
-void EnemyHeilcoptor::generate_bullet_collider() {
-	// íeÇê∂ê¨Ç∑ÇÈèÍèäÇÃãóó£
-	const float GenerateDistance{ 0.8f };
-	// ê∂ê¨Ç∑ÇÈà íuÇÃçÇÇ≥ÇÃï‚ê≥íl
-	const float GenerateHeight{ 1.5f };
-	// íeÇÃà⁄ìÆÉXÉsÅ[Éh
-	const float Speed{ 1.0f };
-	// ê∂ê¨à íuÇÃåvéZ
-	GSvector3 position = transform_.position() + transform_.forward() * GenerateDistance;
-	// ê∂ê¨à íuÇÃçÇÇ≥Çï‚ê≥Ç∑ÇÈ
-	position.y += GenerateHeight;
-	// à⁄ìÆó ÇÃåvéZ
-	GSvector3 velocity = transform_.forward() * Speed;
-	// íeÇÃê∂ê¨
-	world_->add_actor(new PlayerBullet{ world_, position, velocity });
 }
 
 bool EnemyHeilcoptor::is_complete_turn(GSvector3 target_pos)
@@ -176,7 +172,7 @@ bool EnemyHeilcoptor::is_search(float search_distance) const
 	return angle < 15.0f && distance < search_distance;
 }
 
-const Status& EnemyHeilcoptor::get_status() const
+const Character::Status& EnemyHeilcoptor::get_status() const
 {
 	return status_;
 }

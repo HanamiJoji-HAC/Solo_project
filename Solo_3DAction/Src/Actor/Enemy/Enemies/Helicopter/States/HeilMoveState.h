@@ -20,6 +20,6 @@ private:
 	// オーナー
 	EnemyHeilcoptor& owner_;
 	// オーナーのステータス
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 };
 #endif

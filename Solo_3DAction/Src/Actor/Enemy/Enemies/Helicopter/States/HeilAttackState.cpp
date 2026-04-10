@@ -18,7 +18,7 @@ void HeilAttackState::on_update(float delta_time)
 	if (owner_.is_complete_turn(target_pos)) {
 		// 射撃を実行
 		if (!is_fired_) {
-			owner_.fire();
+			owner_.fire(GunInfo::MachineGun);
 			is_fired_ = true;
 		}
 		// タイマーの実行
