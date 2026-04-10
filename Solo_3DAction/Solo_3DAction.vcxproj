@@ -139,6 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Actor\Bullet\BulletBase.cpp" />
+    <ClCompile Include="Src\Actor\Bullet\Bullets\NormalBullet\NormalBullet.cpp" />
     <ClCompile Include="Src\Actor\Character.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.cpp" />
@@ -149,6 +151,7 @@
     <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\States\HeilSearchState.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.cpp" />
     <ClCompile Include="Src\Actor\Enemy\EnemyBase.cpp" />
+    <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAirMoveState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerAttackState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerBoostState.cpp" />
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerDeadState.cpp" />
@@ -161,6 +164,10 @@
     <ClCompile Include="Src\Actor\Player\PlayerStates\PlayerStunState.cpp" />
     <ClCompile Include="Src\Camera\State\CameraLockOnState.cpp" />
     <ClCompile Include="Src\Camera\State\CameraNormalState.cpp" />
+    <ClCompile Include="Src\Camera\State\CameraResetState.cpp" />
+    <ClCompile Include="Src\Gun\GunManager.cpp" />
+    <ClCompile Include="Src\Gun\Guns\GunBase.cpp" />
+    <ClCompile Include="Src\Gun\Guns\MachineGun\MachineGun.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -187,6 +194,12 @@
     <ClCompile Include="Src\State\StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Actor\Bullet\BulletBase.h" />
+    <ClInclude Include="Src\Actor\Bullet\BulletInfo.h" />
+    <ClInclude Include="Src\Actor\Bullet\Bullets\Bazooka.h" />
+    <ClInclude Include="Src\Actor\Bullet\Bullets\Grenade.h" />
+    <ClInclude Include="Src\Actor\Bullet\Bullets\Missle.h" />
+    <ClInclude Include="Src\Actor\Bullet\Bullets\NormalBullet\NormalBullet.h" />
     <ClInclude Include="Src\Actor\Character.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.h" />
@@ -197,6 +210,7 @@
     <ClInclude Include="Src\Actor\Enemy\Enemies\Robot\EnemyRobot.h" />
     <ClInclude Include="Src\Actor\Enemy\EnemyBase.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.h" />
+    <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAirMoveState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerAttackState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerBoostState.h" />
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerDeadState.h" />
@@ -208,9 +222,18 @@
     <ClInclude Include="Src\Actor\Player\PlayerStates\PlayerStunState.h" />
     <ClInclude Include="Src\Camera\State\CameraLockOnState.h" />
     <ClInclude Include="Src\Camera\State\CameraNormalState.h" />
+    <ClInclude Include="Src\Camera\State\CameraResetState.h" />
     <ClInclude Include="Src\External\json.hpp" />
     <ClInclude Include="Src\External\json_fwd.hpp" />
     <ClInclude Include="Src\GameConfig.h" />
+    <ClInclude Include="Src\Gun\GunInfo.h" />
+    <ClInclude Include="Src\Gun\GunManager.h" />
+    <ClInclude Include="Src\Gun\Guns\BazookaLauncher.h" />
+    <ClInclude Include="Src\Gun\Guns\GrenadeLauncher.h" />
+    <ClInclude Include="Src\Gun\Guns\GunBase.h" />
+    <ClInclude Include="Src\Gun\Guns\MachineGun\MachineGun.h" />
+    <ClInclude Include="Src\Gun\Guns\MissileLauncher.h" />
+    <ClInclude Include="Src\Gun\IGun.h" />
     <ClInclude Include="Src\Input.h" />
     <ClInclude Include="Src\Rendering\Layer.h" />
     <ClInclude Include="Src\Scene\GamePlayScene.h" />
