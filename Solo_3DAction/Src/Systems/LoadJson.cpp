@@ -6,7 +6,7 @@ LoadJson& LoadJson::get_instance()
     return self;
 }
 
-Status LoadJson::lode_status(const std::string& file_path, const std::string& key)
+Character::Status LoadJson::lode_status(const std::string& file_path, const std::string& key)
 {
     std::ifstream file(file_path);
     // ファイルパスが存在しない場合は終了
@@ -22,8 +22,8 @@ Status LoadJson::lode_status(const std::string& file_path, const std::string& ke
         std::cerr << "Invalid waypoint key: " << key << std::endl;
         return {};
     }
-
-    Status status;
+    // 第二引数にデフォルト値を持つ
+    Character::Status status;
     status.hp_ = j[key].value("hp_", 10);
     status.energy_ = j[key].value("energy_", 0.0f);
     status.max_energy_ = j[key].value("max_energy_", 0.0f);
@@ -76,4 +76,29 @@ std::vector<GSvector3> LoadJson::lode_way_points(const std::string& file_path, c
         way_points.push_back(way_point);
     }
     return way_points;
+}
+
+BulletInfo::Status LoadJson::lode_bullet_status(const std::string& file_path, const std::string& key)
+{
+    std::ifstream file(file_path);
+    // ファイルパスが存在しない場合は終了
+    if (!file.is_open()) {
+        std::cerr << "Failed to open JSON file: " << file_path << std::endl;
+        return{};
+    }
+
+    json j;
+    file >> j;
+    // キーが存在しない場合は終了
+    if (!j.contains(key)) {
+        std::cerr << "Invalid waypoint key: " << key << std::endl;
+        return {};
+    }
+
+    BulletInfo::Status status;
+    status.atk_      = j[key].value("atk_", 1);
+    status.is_stun_  = j[key].value("is_stun", false);
+    status.speed_    = j[key].value("speed_", 5.0f);
+    status.duration_ = j[key].value("duration_", 1.0f);
+    return status;
 }
