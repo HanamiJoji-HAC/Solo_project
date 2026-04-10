@@ -23,7 +23,7 @@ private:
 	//移動入力値
 	float left_stick_angle{};
 	// オーナーのステータス
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 	// ブースト値
 	GSvector3 boost_value_{};
 };

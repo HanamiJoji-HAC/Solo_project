@@ -56,9 +56,10 @@ void PlayerMoveState::on_update(float delta_time) {
 
     // ŽËŒ‚
     if (input_.get_action_input(InputAction::FIRE)) {
-        //owner_.is_motion_end((GSuint)Layer::Upper_Body);
+        owner_.is_motion_end((GSuint)Layer::Upper_Body);
         owner_.change_motion(0, PlayerMotion::MotionFire, false);
-        owner_.change_state(PlayerState::Fire);
+        //owner_.change_state(PlayerState::Fire);
+        owner_.fire(GunInfo::MachineGun);
         return;
     }
 

@@ -6,66 +6,68 @@
 #include "Player/PlayerBullet.h"
 #include "Input.h"
 
-struct Status
-{
-	// ステータス構造体
-	Status(
-		int hp_ = 50,
-		float energy_ = 100,
-		float max_energy_ = 100,
-		int melee_atk_ = 5,
-		int ranged_atk_ = 1,
-		float jump_power_ = 0.20f,
-		float boost_speed_ = 5.0f,
-		float walk_speed_ = 5.0f,
-		float move_speed_ = 5.0f,
-		float gravity_ = -0.40f,
-		float invisible_timer_ = 3.0f,
-		float default_inbisible_timer_ = 3.0f,
-		float air_move_speed_ = 5.0f,
-		float max_boost_speed_ = 15.0f,
-		float quick_boost_speed_ = 3.0f
-	) :
-		hp_{ hp_ },
-		energy_{ energy_ },
-		max_energy_{ max_energy_ },
-		melee_atk_{ melee_atk_ },
-		ranged_atk_{ ranged_atk_ },
-		jump_power_{ jump_power_ },
-		boost_speed_{ boost_speed_ },
-		walk_speed_{ walk_speed_ },
-		move_speed_{ move_speed_ },
-		gravity_{ gravity_ },
-		invisible_timer_{ invisible_timer_ },
-		default_inbisible_timer_{ default_inbisible_timer_ },
-		air_move_speed_{ air_move_speed_ },
-		max_boost_speed_{ max_boost_speed_ },
-		quick_boost_speed_{ quick_boost_speed_ }
-	{ }
-	int hp_{ 0 };
-	float energy_{ 0.0f };
-	float max_energy_{ 0.0f };
-	int melee_atk_{ 0 };
-	int ranged_atk_{ 0 };
-	float jump_power_{ 0.0f };
-	float boost_speed_{ 0.0f };
-	float walk_speed_{ 0.0f };
-	float move_speed_{ 0.0f };
-	float gravity_{ 0.0f };
-	float invisible_timer_{ 0.0f };
-	float default_inbisible_timer_{ 0.0f };
-	float air_move_speed_{ 0.0f };
-	float max_boost_speed_{ 0.0f };
-	float quick_boost_speed_{ 0.0f };
-};
 // playerとそれに干渉するアクターのためのクラス
 class Character : public Actor {
+public:
+	struct Status
+	{
+		// ステータス構造体
+		Status(
+			int hp_ = 50,
+			float energy_ = 100,
+			float max_energy_ = 100,
+			int melee_atk_ = 5,
+			int ranged_atk_ = 1,
+			float jump_power_ = 0.20f,
+			float boost_speed_ = 5.0f,
+			float walk_speed_ = 5.0f,
+			float move_speed_ = 5.0f,
+			float gravity_ = -0.40f,
+			float invisible_timer_ = 3.0f,
+			float default_inbisible_timer_ = 3.0f,
+			float air_move_speed_ = 5.0f,
+			float max_boost_speed_ = 15.0f,
+			float quick_boost_speed_ = 3.0f
+		) :
+			hp_{ hp_ },
+			energy_{ energy_ },
+			max_energy_{ max_energy_ },
+			melee_atk_{ melee_atk_ },
+			ranged_atk_{ ranged_atk_ },
+			jump_power_{ jump_power_ },
+			boost_speed_{ boost_speed_ },
+			walk_speed_{ walk_speed_ },
+			move_speed_{ move_speed_ },
+			gravity_{ gravity_ },
+			invisible_timer_{ invisible_timer_ },
+			default_inbisible_timer_{ default_inbisible_timer_ },
+			air_move_speed_{ air_move_speed_ },
+			max_boost_speed_{ max_boost_speed_ },
+			quick_boost_speed_{ quick_boost_speed_ }
+		{
+		}
+		int hp_{ 0 };
+		float energy_{ 0.0f };
+		float max_energy_{ 0.0f };
+		int melee_atk_{ 0 };
+		int ranged_atk_{ 0 };
+		float jump_power_{ 0.0f };
+		float boost_speed_{ 0.0f };
+		float walk_speed_{ 0.0f };
+		float move_speed_{ 0.0f };
+		float gravity_{ 0.0f };
+		float invisible_timer_{ 0.0f };
+		float default_inbisible_timer_{ 0.0f };
+		float air_move_speed_{ 0.0f };
+		float max_boost_speed_{ 0.0f };
+		float quick_boost_speed_{ 0.0f };
+	};
 public:
 	Character(const Status& status);
 
 	virtual ~Character() = default;
 public:
-	virtual void take_damage(Actor& other, int damage);				// 相手の体力を減らす処理
+	virtual void take_damage(int damage);							// 相手の体力を減らす処理
 	virtual void update_gravity(float delta_time, float grav);		// 重力
 	virtual bool check_ground();									// 接地判定
 	void set_invisible(bool is_invisible, float invisible_timer); 	// 無敵を設定する

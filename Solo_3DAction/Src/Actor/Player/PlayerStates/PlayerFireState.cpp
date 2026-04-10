@@ -7,7 +7,7 @@ PlayerFireState::PlayerFireState(Player& owner) : owner_(owner) {
 }
 //ステートが開始された時に起こる
 void PlayerFireState::on_enter() {
-	owner_.fire();
+	//owner_.fire();
 }
 //ステートが実行中に毎フレーム呼ばれる
 void PlayerFireState::on_update(float delta_time) {
