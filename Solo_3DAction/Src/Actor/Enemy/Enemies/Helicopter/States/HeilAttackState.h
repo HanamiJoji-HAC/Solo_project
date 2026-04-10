@@ -20,7 +20,7 @@ private:
 	// オーナー
 	EnemyHeilcoptor& owner_;
 	// オーナーのステータス
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 	float timer_{ 0.0f };
 	bool is_fired_{ false };
 };

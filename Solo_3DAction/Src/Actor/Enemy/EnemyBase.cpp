@@ -1,19 +1,19 @@
 #include "EnemyBase.h"
 
 // コンストラクタ
-EnemyBase::EnemyBase(const Status status) : Character(status){
+EnemyBase::EnemyBase(const Status& status) : Character(status){
 }
 
 // 待機
-void EnemyBase::Idle() {
-}
+void EnemyBase::Idle() {}
 
 // 移動
-void EnemyBase::move(float delta_time, float move_speed) {
-}
+void EnemyBase::move(float delta_time, float move_speed) {}
 
 // 発射
-void EnemyBase::fire() {
+void EnemyBase::fire(GunInfo::Gun_ID gun_id)
+{
+	guns_.fire(gun_id, this);
 }
 
 // プレイヤーを捜索
@@ -22,12 +22,12 @@ bool EnemyBase::search(float search_timer, float delta_time) {
 }
 
 // プレイヤーを追尾
-void EnemyBase::chase(Actor* player) {
-}
+void EnemyBase::chase(Actor* player) {}
 
 // リロード
-void EnemyBase::reload(float cool_time) {
-}
+void EnemyBase::reload(float cool_time) {}
+
+void EnemyBase::add_gun(){}
 
 // ターゲット方向の角度を求める（符号付き）
 float EnemyBase::target_signed_angle() const {

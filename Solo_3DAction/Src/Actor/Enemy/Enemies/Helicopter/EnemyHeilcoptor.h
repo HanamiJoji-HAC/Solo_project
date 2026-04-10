@@ -13,22 +13,26 @@ public:
 	// コンストラクタ
 	EnemyHeilcoptor(IWorld* world, const GSvector3& position, const Status& status, const std::vector<GSvector3> way_points);
 	// 更新
-	virtual void update(float delta_time) override;
+	void update(float delta_time) override;
 	// 描画
-	virtual void draw() const override;
+	void draw() const override;
 	// GUI描画
-	virtual void draw_gui() const override;
+	void draw_gui() const override;
 	// 衝突リアクション
-	virtual void react(Actor& other) override;
+	void react(Actor& other) override;
 public:
 	// 索敵
-	virtual bool search(float search_timier = 1.0f, float delta_time = 1.0f) override;
+	bool search(float search_timier = 1.0f, float delta_time = 1.0f) override;
 	// 発射
-	virtual void fire() override;
+	void fire(GunInfo::Gun_ID gun_id) override;
 	// 移動
-	virtual void move(float delta_time, float move_speed) override;
+	void move(float delta_time, float move_speed) override;
 	// 方向転換
 	void turn_to(const GSvector3& target_pos, float rotate_speed, float delta_time);
+
+	void chase_bullet();
+
+	void add_gun() override;
 public:
 	// 回転は完了しているか？
 	bool is_complete_turn(GSvector3 target_pos);
@@ -45,8 +49,6 @@ public:
 private:
 	//	ステートの追加
 	void add_state();
-	// 弾の生成
-	void generate_bullet_collider();
 private:
 	// 状態タイマ
 	float state_timer_{ 0.0f };
