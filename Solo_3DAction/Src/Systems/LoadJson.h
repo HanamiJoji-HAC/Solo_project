@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "Actor/Character.h"
+#include "Actor/Bullet/BulletInfo.h"
 
 // 外部Jsonツールの参照
 #include "External/json.hpp"
@@ -20,10 +21,11 @@ public:
 	static LoadJson& get_instance();
 
 	// ステータス情報を取得する
-	Status lode_status(const std::string& file_path, const std::string& key);
+	Character::Status lode_status(const std::string& file_path, const std::string& key);
 	// 目的座標情報を取得する
 	std::vector<GSvector3> lode_way_points(const std::string& file_path, const std::string& key);
-
+	// 銃のステータスを取得する
+	BulletInfo::Status lode_bullet_status(const std::string& file_path, const std::string& key);
 private:
 
 public:
