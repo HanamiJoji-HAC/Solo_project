@@ -6,6 +6,7 @@
 #include "Actor/Character.h"
 #include "Systems/LoadJson.h"
 #include "Actor/Enemy/Enemies/Helicopter/Propeller.h"
+
 // ゲームプレイシーン
 class GamePlayScene : public IScene {
 public:

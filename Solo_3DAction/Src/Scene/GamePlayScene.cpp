@@ -38,23 +38,26 @@ void GamePlayScene::start() {
     world_.add_field(new Field{ Octree_Test_Stage, Octree_Test_Stage_Collider, Texture_Skybox });
     // カメラクラスの追加
     world_.add_camera(new CameraTPS{
-              &world_, GSvector3{ 0.0f, 2.0f, -4.0f }, GSvector3{ 0.0f, 1.0f, 0.0f } });
+              &world_, GSvector3{ 0.0f, 2.0f, 4.0f }, GSvector3{ 0.0f, 1.0f, 0.0f } });
     // ライトクラスの追加
     world_.add_light(new Light{ &world_ });
 
-    Status player_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "Player");
+    Character::Status player_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "Player");
     // プレーヤーを追加
-    world_.add_actor(new Player{ &world_, GSvector3{ 0.0f, 20.0f, -30.0f }, player_status });
-    // エネミーを追加
-    Status enemy_cannon_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyCannon");
+    world_.add_actor(new Player{ &world_, GSvector3{ 0.0f, 0.0f, 0.0f }, player_status });
+    // 大砲
+    Character::Status enemy_cannon_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyCannon");
     world_.add_actor(new EnemyCannon{ &world_, GSvector3{ 0.0f, 0.0f, 10.0f }, enemy_cannon_status});
-    Status enemy_drone_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyDrone");
+    // ドローン
+    Character::Status enemy_drone_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyDrone");
     world_.add_actor(new EnemyDrone{ &world_, GSvector3{ 10.0f, 2.0f, 10.0f }, enemy_drone_status });
-    Status enemy_robot_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyRobot");
+    // ロボット
+    Character::Status enemy_robot_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyRobot");
     world_.add_actor(new EnemyRobot{ &world_, GSvector3{ 20.0f, 0.0f, 10.0f }, enemy_robot_status });
-    Status enemy_heil_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyHeil");
+    // ヘリコプター
+    Character::Status enemy_heil_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyHeil");
     std::vector<GSvector3> way_points = json_.lode_way_points("Assets/Json/WayPointLoder.Json", "WayPoints01");
-    world_.add_actor(new EnemyHeilcoptor{ &world_, GSvector3{ 0.0f, 10.0f, -75.0f }, enemy_heil_status, way_points});
+    world_.add_actor(new EnemyHeilcoptor{ &world_, GSvector3{ 0.0f, 5.0f, -75.0f }, enemy_heil_status, way_points});
 }
 
 // 更新

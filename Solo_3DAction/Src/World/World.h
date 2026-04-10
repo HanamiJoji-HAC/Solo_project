@@ -7,6 +7,8 @@
 //#include "Timer.h"
 #include <gslib.h>
 
+#include "Gun/GunManager.h"
+
 // ワールドクラス
 class World : public IWorld {
 public:
