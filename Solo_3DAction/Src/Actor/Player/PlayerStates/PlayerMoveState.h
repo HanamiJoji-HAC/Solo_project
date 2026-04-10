@@ -4,6 +4,8 @@
 #include "State/IState.h"
 #include "../Player.h"
 #include "Input.h"
+#include "Gun/GunInfo.h"
+
 class PlayerMoveState : public IState {
 public:
 	PlayerMoveState(Player& owner);
@@ -23,6 +25,6 @@ private:
 	//移動入力値
 	//float left_stick_angle{};
 	// オーナーのステータス
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 };
 #endif

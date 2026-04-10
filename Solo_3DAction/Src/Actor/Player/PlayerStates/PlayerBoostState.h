@@ -19,7 +19,7 @@ private:
 	// プレイヤーを取得
 	Player& owner_;
 	// オーナーのステータス
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 	// 入力クラス
 	Input& input_ = Input::get_instance();
 };

@@ -7,6 +7,10 @@
 #include "State/StateMachine.h"
 #include "Input.h"
 #include "Camera/CameraTPS.h"
+
+#include "Gun/GunManager.h"
+#include "Gun/GunInfo.h"
+
 // プレーヤークラス
 class Player : public Character {
 public:
@@ -61,7 +65,7 @@ public:
     // 攻撃
     void attack();
     // 射撃
-    void fire();
+    void fire(GunInfo::Gun_ID gun_id);
     // ジャンプ
     void set_jump(float jumpPower);
     // 移動
@@ -103,10 +107,12 @@ public:
     Status& get_status();
     // 前回のモーションを取得
     GSuint get_prev_motion() const;
-    // 全開のステートを取得
+    // 前回のステートを取得
     int get_previous_state();
     // クイックブースト中か？
     bool is_quick_boost() const;
+    // 銃を登録する
+    void add_gun();
 public:
     //Tips:変数はプライベートにしてゲッターを作る
     //モーションデバッグ用
@@ -128,7 +134,8 @@ private:
     bool motion_loop_;
     // ステートマシン
     StateMachine state_machine_;
-    GSvector2 move_input_value_;
+    // 銃マネージャー
+    GunManager guns_;
 private:
     // プレイヤーのモーションデバッグ
     void Player_State_Debug();

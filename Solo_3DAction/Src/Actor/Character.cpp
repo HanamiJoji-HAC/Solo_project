@@ -4,7 +4,7 @@
 
 Character::Character(const Status& status) : status_(status) {}
 
-void Character::take_damage(Actor& other, int damage) {
+void Character::take_damage(int damage) {
 	status_.hp_ = CLAMP(status_.hp_ - damage, 0, INT_MAX);
 }
 

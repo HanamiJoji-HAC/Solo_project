@@ -1,6 +1,9 @@
 //Todo:名前順とか命名規則決める
 #include "Assets.h"
 #include "Collision/AttackCollider.h"
+#include "GameConfig.h"
+#include "Rendering/Layer.h"
+
 #include "Player.h"
 #include "PlayerBullet.h"
 #include "PlayerStates/PlayerAttackState.h"
@@ -13,9 +16,8 @@
 #include "PlayerStates/PlayerBoostState.h"
 #include "PlayerStates/PlayerFireState.h"
 #include "PlayerStates/PlayerQuickBoostState.h"
-#include "GameConfig.h"
-#include "Rendering/Layer.h"
 
+#include "Gun/Guns/MachineGun/MachineGun.h"
 #include <algorithm>
 #include "imgui/imgui.h"
 //Todo:コメントアウトに規則を持たせる
@@ -45,7 +47,7 @@ Player::Player(IWorld* world, const GSvector3& position, const Status& status) :
     mesh_.set_layer_indices(1, lower_body_bone_id, 12);
     height_ = 2.0f;
 
-
+    add_gun();
 }
 
 // 更新
@@ -161,8 +163,8 @@ void Player::attack() {
     generate_attack_collider();
 }
 // 射撃
-void Player::fire() {
-    generate_bullet_collider();
+void Player::fire(GunInfo::Gun_ID gun_id) {
+    guns_.fire(gun_id, this);
 }
 
 //ジャンプ力を設定
@@ -329,7 +331,7 @@ const char*Player::current_state_to_string(State state) {
 }
 
 // ステータスを参照する
-Status& Player::get_status(){
+Character::Status& Player::get_status(){
     return status_;
 }
 
@@ -375,6 +377,12 @@ int Player::get_previous_state() {
 bool Player::is_quick_boost() const {
     return is_quick_boost_;
 }
+// 銃を登録する
+void Player::add_gun()
+{
+    // TODO:コードの見直し
+    guns_.add_gun(new MachineGun(world_, BulletInfo::Normal));
+}
 
 bool Player::is_motion_end() const {
     return mesh_.is_motion_end();
@@ -382,7 +390,7 @@ bool Player::is_motion_end() const {
 
 // プレイヤーのモーションデバッグ
 void Player::Player_State_Debug() {
-#ifndef DEBUG
+#ifdef _DEBUG
     ImGui::Begin("Player_motion_state");
     auto motion = static_cast<int>(motion_);
     ImGui::DragInt("motion_num:", &motion);
@@ -397,10 +405,10 @@ void Player::Player_State_Debug() {
     auto prev_state_num = (State)get_previous_state();
     ImGui::Text("Previou State is %s", current_state_to_string(prev_state_num));
     bool motion_end_uppder = is_motion_end((GSuint)Layer::Upper_Body);
-    bool motion_end_lower = is_motion_end((GSuint)Layer::Lower_Body);
-    bool motion_end = is_motion_end();
     ImGui::Text("is_end_motion(up): %s", motion_end_uppder ? "true" : "false");
+    bool motion_end_lower = is_motion_end((GSuint)Layer::Lower_Body);
     ImGui::Text("is_end_motion(low): %s", motion_end_lower ? "true" : "false");
+    bool motion_end = is_motion_end();
     ImGui::Text("is_end_motion: %s", motion_end ? "true" : "false");
     int up_motion_num = (int)up_motion_num_;
     ImGui::DragInt("up_motion_num", &up_motion_num);
@@ -412,7 +420,7 @@ void Player::Player_State_Debug() {
 
 // プレイヤーステータスデバッグ
 void Player::Player_Status_Debug() {
-#ifndef DEBUG
+#ifdef _DEBUG
     ImGui::Begin("PlayerStatus");
     ImGui::DragFloat3("velocity", velocity_);
     ImGui::DragFloat3("position", transform_.position());
@@ -435,5 +443,5 @@ void Player::Player_Status_Debug() {
     bool invisible = is_invisible();
     ImGui::Text("is_invisible: %s", invisible ? "true" : "false");
     ImGui::End();
-#endif // !DEBUG
+#endif
 };

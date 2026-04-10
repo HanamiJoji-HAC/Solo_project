@@ -20,6 +20,6 @@ private:
 	Player& owner_;
 	//インスタンスを取得
 	Input& input_ = Input::get_instance();
-	const Status& owner_status_ = owner_.get_status();
+	const Character::Status& owner_status_ = owner_.get_status();
 };
 #endif
