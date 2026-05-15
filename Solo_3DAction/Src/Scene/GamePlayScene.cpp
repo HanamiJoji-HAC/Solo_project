@@ -9,41 +9,26 @@
 #include "Camera/CameraTPS.h"
 #include "Light/Light.h"
 #include "World/Field.h"
-
-#include <GSstandard_shader.h>
+#include "Actor/Bullet/BulletInfo.h"
 
 // 開始
 void GamePlayScene::start() {
     // シーンフラグをオフにする
     is_end_ = false;
-    gsInitDefaultShader();
-    // プレイヤーメッシュの読み込み
-    gsLoadSkinMesh(Mesh_Player, "Assets/Player/Player.mshb");
-    // 敵メッシュの読み込み
-    gsLoadSkinMesh(Mesh_Cannon, "Assets/Enemy/Enemy_Cannon/Enemy_Cannon.mshb");
-    gsLoadSkinMesh(Mesh_Cannon, "Assets/Enemy/Enemy_Cannon/Enemy_Cannon_Body.mshb");
-    gsLoadSkinMesh(Mesh_Drone, "Assets/Enemy/Enemy_Drone/Enemy_Drone.mshb");
-    gsLoadSkinMesh(Mesh_Robot, "Assets/Enemy/Enemy_Robot/Enemy_Robot.mshb");
-    gsLoadMesh(Mesh_Helicopter, "Assets/Enemy/Enemy_Helicoptor/Enemy_Helicoptor_Body.mshb");
-    gsLoadMesh(Mesh_Heil_Prop, "Assets/Enemy/Enemy_Helicoptor/Enemy_Heilcoptor_Propeller.mshb");
-    // 弾メッシュの読み込み
-    gsLoadMesh(Mesh_Bullet, "Assets/Bullet/Bullet.mshb");
-    // スカイボックス用テクスチャの読み込み
-    gsLoadTexture(Texture_Skybox, "Assets/Skybox/default_skybox.dds");
-    // ステージオクトリーの読み込み
-    gsLoadOctree(Octree_Test_Stage, "Assets/Stage/Stage1/Octree/Stage1_Octree.oct");
-    // ステージ衝突判定用オクトリーの読み込み
-    gsLoadOctree(Octree_Test_Stage_Collider, "Assets/Stage/Stage1/Collider/Stage1_Collider.oct");
+
+    // インダイレクトメッシュの読み込み
+    gsLoadIndirectMesh(0, "Assets/Stage/Stage1/Ind/Stage1.ind");
+
     // フィールドクラスの追加
-    world_.add_field(new Field{ Octree_Test_Stage, Octree_Test_Stage_Collider, Texture_Skybox });
+    world_.add_field(new Field{ Octree_Stage1, Octree_Stage1_Collider, Texture_Skybox });
     // カメラクラスの追加
     world_.add_camera(new CameraTPS{
               &world_, GSvector3{ 0.0f, 2.0f, 4.0f }, GSvector3{ 0.0f, 1.0f, 0.0f } });
     // ライトクラスの追加
     world_.add_light(new Light{ &world_ });
 
-    Character::Status player_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "Player");
     // プレーヤーを追加
+    Character::Status player_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "Player");
     world_.add_actor(new Player{ &world_, GSvector3{ 0.0f, 0.0f, 0.0f }, player_status });
     // 大砲
     Character::Status enemy_cannon_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyCannon");
@@ -58,6 +43,10 @@ void GamePlayScene::start() {
     Character::Status enemy_heil_status = json_.lode_status("Assets/Json/ActorStatusLoder.Json", "EnemyHeil");
     std::vector<GSvector3> way_points = json_.lode_way_points("Assets/Json/WayPointLoder.Json", "WayPoints01");
     world_.add_actor(new EnemyHeilcoptor{ &world_, GSvector3{ 0.0f, 5.0f, -75.0f }, enemy_heil_status, way_points});
+
+    //bullet_status_.push_back(json_.lode_bullet_status("Assets/Json/BulletStatusLoader.json", "NormalBullet"));
+    BulletInfo& bullet_info = BulletInfo::get_instance();
+    bullet_info.load();
 }
 
 // 更新
@@ -68,12 +57,19 @@ void GamePlayScene::update(float delta_time) {
         is_end_ = true;
         return;
     }
+
 }
 
 // 描画
 void GamePlayScene::draw() const {
+    // スカイボックスの描画
     gsDrawSkyboxCubemap(Texture_Skybox);
+    // ワールドの描画
     world_.draw();
+    // LODの更新
+    gsUpdateIndirectMeshLod(0);
+    // インダイレクトメッシュの描画
+    gsDrawIndirectMesh(0);
 }
 
 // 終了しているか？
@@ -88,6 +84,14 @@ std::string GamePlayScene::next() const {
 
 // 終了
 void GamePlayScene::end() {
+    // インダイレクトメッシュの削除
+    gsDeleteIndirectMesh(0);
     // ワールドを消去
     world_.clear();
 }
+
+// 弾情報を返却する
+//const Bullet_Status& GamePlayScene::get_bullet_status(int bullet_id) const
+//{
+//    return bullet_status_[bullet_id];
+//}
