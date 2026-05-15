@@ -6,7 +6,7 @@
 class NormalBullet : public BulletBase {
 public:
 	// コンストラクタ
-	NormalBullet(IWorld* world, const GSvector3& position, const BulletInfo::Status& status, Actor* owner, unsigned int mesh_num);
+	NormalBullet(IWorld* world, const GSvector3& position, Actor* owner, unsigned int mesh_num, Bullet_Status status);
 	// 移動
 	void update(float delta_time) override;
 	// 描画
