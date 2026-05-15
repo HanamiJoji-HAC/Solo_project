@@ -19,21 +19,10 @@ void GunBase::draw() const
 	gsDrawMesh(mesh_id_);
 	glPopMatrix();
 }
-// ”­ŽË
+// ƒfƒtƒHƒ‹ƒg”­ŽË
 void GunBase::fire(Actor* owner)
 {
-    // ID‚É‰ž‚¶‚Ä’e‚ð¶¬‚·‚é
-    BulletBase* bullet = nullptr;
-
-    switch (bullet_id_)
-    {
-    case BulletInfo::Normal:
-        // Json‚©‚ç’eî•ñ‚ð“Ç‚Ýž‚Þ
-        BulletInfo::Status normal_bullet_status = json_.lode_bullet_status("Assets/Json/BulletStatusLoader.json", "NormalBullet");
-        // ’e‚ð¶¬
-        bullet = new NormalBullet(world_, owner->transform().position() + GSvector3{ 0.0f, 1.0, 0.0f}, normal_bullet_status, owner, Mesh_Bullet);
-        break;
-    }
-
-    world_->add_actor(bullet);
+    // ’e‚ð¶¬
+    auto* bullet = new NormalBullet(world_, owner->transform().position() + GSvector3{ 0.0f, 1.0, 0.0f}, owner, Mesh_Bullet, bullet_info_.get_bullet(bullet_id_));
+	world_->add_actor(bullet);
 }
