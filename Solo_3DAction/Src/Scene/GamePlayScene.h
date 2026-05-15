@@ -27,8 +27,8 @@ private:
     World world_;
     // シーンが終了しているか？
     bool is_end_{ false };
-    Propeller* propeller_{ nullptr };
     LoadJson& json_ = LoadJson::get_instance();
+
 };
 
 #endif
