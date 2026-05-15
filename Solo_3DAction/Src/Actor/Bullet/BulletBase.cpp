@@ -5,8 +5,7 @@
 float LifeSpanTimer{ 5.0f };
 
 // コンストラクタ
-BulletBase::BulletBase(IWorld* world, const BulletInfo::Status& status, Actor* owner, unsigned int mesh_num) : 
-	status_{ status },
+BulletBase::BulletBase(IWorld* world, Actor* owner, unsigned int mesh_num) : 
 	owner_{ owner },
 	mesh_num{ mesh_num }
 {

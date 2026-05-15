@@ -12,7 +12,7 @@ class Actor;
 class BulletBase : public Actor {
 public:
 	// コンストラクタ
-	BulletBase(IWorld* world, const BulletInfo::Status& status, Actor* owner, unsigned int mesh_num);
+	BulletBase(IWorld* world, Actor* owner, unsigned int mesh_num);
 	// 更新
 	void update(float delta_time) override;
 	// 衝突判定
@@ -26,7 +26,7 @@ protected:
 	// 弾の寿命
 	float lifespan_timer_{};
 	// 弾ステータス
-	BulletInfo::Status status_{};
+	Bullet_Status status_{};
 	// オーナー
 	Actor* owner_{};
 private:

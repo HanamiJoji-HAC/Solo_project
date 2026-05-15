@@ -1,12 +1,13 @@
 #include "NormalBullet.h"
 #include "GameConfig.h"
 
-NormalBullet::NormalBullet(IWorld* world, const GSvector3& position, const BulletInfo::Status& status, Actor* owner, unsigned int mesh_num) : 
-	BulletBase(world, status, owner, mesh_num)
+NormalBullet::NormalBullet(IWorld* world, const GSvector3& position, Actor* owner, unsigned int mesh_num, Bullet_Status status) : 
+	BulletBase(world, owner, mesh_num)
 {
 	// –¼‘O‚ğ“o˜^
 	tag_ = "BulletTag";
 	name_ = "NormalBullet";
+	status_ = status;
 	// Õ“Ë”»’è—p‚Ì‹…‘Ì‚ğİ’è
 	collider_ = BoundingSphere{ 0.2f };
 	transform_.position(position);
@@ -50,6 +51,10 @@ void NormalBullet::draw() const
 	gsDrawMesh(Mesh_Bullet);
 	glPopMatrix();
 	collider().draw();
+}
+
+void NormalBullet::on_hit()
+{
 }
 
 void NormalBullet::set_velocity()
