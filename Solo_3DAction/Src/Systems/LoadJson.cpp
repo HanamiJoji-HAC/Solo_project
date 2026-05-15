@@ -1,5 +1,7 @@
 #include "LoadJson.h"
 
+#include "Actor/Bullet/BulletInfo.h"
+
 LoadJson& LoadJson::get_instance()
 {
     static LoadJson self;
@@ -78,7 +80,7 @@ std::vector<GSvector3> LoadJson::lode_way_points(const std::string& file_path, c
     return way_points;
 }
 
-BulletInfo::Status LoadJson::lode_bullet_status(const std::string& file_path, const std::string& key)
+Bullet_Status LoadJson::lode_bullet_status(const std::string& file_path, const std::string& key)
 {
     std::ifstream file(file_path);
     // ファイルパスが存在しない場合は終了
@@ -95,7 +97,7 @@ BulletInfo::Status LoadJson::lode_bullet_status(const std::string& file_path, co
         return {};
     }
 
-    BulletInfo::Status status;
+    Bullet_Status status;
     status.atk_      = j[key].value("atk_", 1);
     status.is_stun_  = j[key].value("is_stun", false);
     status.speed_    = j[key].value("speed_", 5.0f);

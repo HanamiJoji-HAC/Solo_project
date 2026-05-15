@@ -1,8 +1,10 @@
-#include <GSGame.h>
+#include <GSGameEx.h>
 #include "Scene/SceneManager.h"
 #include "Scene/GamePlayScene.h"
+#include "Scene/LoadGameScene.h"
 #include "GameConfig.h"
 #include "Input.h"
+#include <GSstandard_shader.h>
 #include <GSEffect.h>
 
 class MyGame : public gslib::Game {
@@ -13,11 +15,14 @@ public:
     }
     // 開始
     void start() override {
+        // デフォルトシェーダーを初期化
+        gsInitDefaultShader();
         // エフェクトの初期化
         gsInitEffect();
 
+        scene_manager_.add("LoadGamePlayScene", new LoadGameScene());
         scene_manager_.add("GamePlayScene", new GamePlayScene());
-        scene_manager_.change("GamePlayScene");
+        scene_manager_.change("LoadGamePlayScene");
     }
     // 更新
     void update(float delta_time) override {

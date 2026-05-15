@@ -4,11 +4,13 @@
 #include <fstream>
 #include <iostream>
 #include "Actor/Character.h"
-#include "Actor/Bullet/BulletInfo.h"
 
 // 外部Jsonツールの参照
 #include "External/json.hpp"
 using json = nlohmann::json;
+
+struct Bullet_Status;
+
 // Jsonの読み込みに関連する処理を保持しているクラス
 class LoadJson {
 public:
@@ -25,9 +27,7 @@ public:
 	// 目的座標情報を取得する
 	std::vector<GSvector3> lode_way_points(const std::string& file_path, const std::string& key);
 	// 銃のステータスを取得する
-	BulletInfo::Status lode_bullet_status(const std::string& file_path, const std::string& key);
-private:
-
+	Bullet_Status lode_bullet_status(const std::string& file_path, const std::string& key);
 public:
 	// コピー禁止
 	LoadJson(const LoadJson&) = delete;
