@@ -70,6 +70,8 @@ public:
     void set_jump(float jumpPower);
     // 移動
     void move(float delta_time,float move_speed) override;
+    // ブーストの開始処理
+    void set_boost();
     // ブースト
     void boost(float delta_time, float boost_power) override;
     // クイックブースト
@@ -113,6 +115,8 @@ public:
     bool is_quick_boost() const;
     // 銃を登録する
     void add_gun();
+    // ブースト時の加速値を取得する
+    GSvector3 get_boost_velocity() const;
 public:
     //Tips:変数はプライベートにしてゲッターを作る
     //モーションデバッグ用
@@ -136,6 +140,8 @@ private:
     StateMachine state_machine_;
     // 銃マネージャー
     GunManager guns_;
+    // ブースト時の速度
+    GSvector3 boost_velocity_{};
 private:
     // プレイヤーのモーションデバッグ
     void Player_State_Debug();

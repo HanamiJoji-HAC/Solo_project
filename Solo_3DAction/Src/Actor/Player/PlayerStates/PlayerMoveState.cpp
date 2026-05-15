@@ -63,6 +63,15 @@ void PlayerMoveState::on_update(float delta_time) {
         return;
     }
 
+    // ブースト
+    if (input_.get_action_input(InputAction::BOOST)) {
+        if (input_.get_action_input(InputAction::IDLE)) return;
+        owner_.set_boost();
+        owner_.change_motion(PlayerMotion::MotionBoost, true);
+        owner_.change_state(PlayerState::Boost);
+        return;
+    }
+
     // 使わないIdleステートにデバッグ挙動を追加する
 #ifndef DEBUG
     if (gsGetKeyTrigger(GKEY_I)) {
@@ -74,7 +83,6 @@ void PlayerMoveState::on_update(float delta_time) {
     // HACK
     GSvector2 left_stick_value = input_.get_left_stick_axis();
     if (input_.get_action_input(InputAction::QUICKBOOST) && left_stick_value != GSvector2{ 0, 0 }) {
-        //owner_.change_motion(PlayerMotion::MotionJump, false);
         owner_.change_state(PlayerState::QuickBoost);
         if (input_.get_action_input(InputAction::LSTICK_UP)) {
             owner_.change_motion(PlayerMotion::MotionQuickBoostUp, false);

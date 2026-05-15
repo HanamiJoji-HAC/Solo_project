@@ -58,8 +58,9 @@ void Player::update(float delta_time) {
     // 無敵状態
     if(is_invisible()) invisible(delta_time);
 
-    // クイックブースト
     if (state_machine_.is_current_state(static_cast<int>(State::Stun))) return;
+
+    // クイックブースト
     if (is_quick_boost()) {
         quick_boost(delta_time);
     }
@@ -80,11 +81,9 @@ void Player::update(float delta_time) {
         change_state(PlayerState::Dead);
         return;
     }
-
+    // ステータスの更新
     Player_State_Debug();
-
     Player_Status_Debug();
-
 }
 
 // 描画
@@ -158,6 +157,8 @@ void Player::move(float delta_time, float move_speed) {
     transform_.translate(velocity, GStransform::Space::World);
 }
 
+
+
 // 攻撃
 void Player::attack() {
     generate_attack_collider();
@@ -173,14 +174,47 @@ void Player::set_jump(float jumpPower) {
     transform_.translate(velocity_, GStransform::Space::World);
 }
 
+// ブーストの開始処理
+void Player::set_boost()
+{
+    boost_velocity_ = GSvector3(0.0f, velocity_.y, 0.0f);
+}
 // ブースト
 void Player::boost(float delta_time, float boost_power) {
-    // ブースト入力を保持
-    int boost_input = input_.get_action_input(InputAction::BOOST);
-    float boost_speed = boost_power * boost_input * (delta_time / cREF);
-    // Todo:加速度的な値でブーストしたい
-    //boost_speed = std::clamp(boost_speed, 0.0f, status_.max_boost_speed_);
-    velocity_.y = boost_speed;
+    // カメラの前方向ベクトルを取得
+    GSvector3 forward = world_->camera()->transform().forward();
+    forward.y = 0.0f;
+    // カメラの右方向ベクトルを取得
+    GSvector3 right = world_->camera()->transform().right();
+    right.y = 0.0f;
+    // 移動入力を取得
+    GSvector2 move_input = input_.get_left_stick_axis();
+
+    // 入力値から移動ベクトルを計算
+    if (input_.get_action_input(InputAction::IDLE)) {
+        // 入力が無い場合は減速する
+        //boost_velocity_ *= 0.9f;
+        velocity_ *= 0.9f;
+    }
+    else {
+        velocity_ += forward * move_input.y * boost_power * (delta_time / cREF);
+        velocity_ += right * move_input.x * boost_power * (delta_time / cREF);
+        velocity_.x = CLAMP(velocity_.x, -0.25f, 0.25f);
+        velocity_.z = CLAMP(velocity_.z, -0.25f, 0.25f);
+    }
+
+    // 回転処理
+    if (velocity_.length() != 0.0f) {
+        // 向きの補間
+        GSquaternion rotation =
+            GSquaternion::rotateTowards(
+                transform_.rotation(),
+                GSquaternion::lookRotation(forward), 12.0f * delta_time);
+        transform_.rotation(rotation);
+    }
+    // 移動する
+    transform_.translate(velocity_, GStransform::Space::World);
+    update_gravity(delta_time, gravity);
 }
 // クイックブーストの開始処理
 void Player::set_quick_boost(float boost_power) {
@@ -192,10 +226,6 @@ void Player::set_quick_boost(float boost_power) {
     // カメラの右方向ベクトルを取得
     GSvector3 right = world_->camera()->transform().right();
     right.y = 0.0f;
-    ImGui::Begin("Camera");
-    ImGui::DragFloat3("forward", forward);
-    ImGui::DragFloat3("right", right);
-    ImGui::End();
     // 入力値を取得
     GSvector2 input = input_.get_left_stick_axis();
     // キーの入力値から移動ベクトルを計算
@@ -211,10 +241,10 @@ void Player::quick_boost(float delta_time) {
     // 減速処理
     velocity_ -= velocity_ * deceleration_ * (delta_time / cREF);
     // ほぼ停止していれば終了
-    if (velocity_.magnitude() <= 0.05f) {
+    if (velocity_.magnitude() <= 0.20f) {
         velocity_ = { 0, 0, 0 };
         is_quick_boost_ = false;
-        change_state(State::Move);
+        change_state(State::Boost);
         return;
     }
     transform_.translate(velocity_, GStransform::Space::World);
@@ -384,6 +414,12 @@ void Player::add_gun()
     guns_.add_gun(new MachineGun(world_, BulletInfo::Normal));
 }
 
+// ブースト時の加速値を取得する
+GSvector3 Player::get_boost_velocity() const
+{
+    return boost_velocity_;
+}
+
 bool Player::is_motion_end() const {
     return mesh_.is_motion_end();
 }
@@ -426,6 +462,7 @@ void Player::Player_Status_Debug() {
     ImGui::DragFloat3("position", transform_.position());
     ImGui::DragFloat3("forward", transform().forward());
     ImGui::DragFloat3("rotation", transform().eulerAngles());
+    ImGui::DragFloat3("boost_speed", boost_velocity_);
     ImGui::DragInt("hp", &status_.hp_);
     ImGui::DragInt("m_atk", &status_.melee_atk_);
     ImGui::DragInt("r_atk", &status_.ranged_atk_);
