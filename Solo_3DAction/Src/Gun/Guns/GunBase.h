@@ -4,7 +4,9 @@
 #include "../IGun.h"
 #include "World/IWorld.h"
 #include "Rendering/AnimatedMesh.h"
+
 #include "Systems/LoadJson.h"
+#include "Actor/Bullet/BulletInfo.h"
 
 class GunBase : public IGun {
 public:
@@ -22,7 +24,8 @@ protected:
 	// ÉèÅ[ÉãÉh
 	IWorld* world_{ nullptr };
 	// íeID
-	BulletInfo::Bullet_ID bullet_id_;
+	BulletInfo::Bullet_ID bullet_id_{};
+	BulletInfo& bullet_info_ = BulletInfo::get_instance();
 	LoadJson& json_ = LoadJson::get_instance();
 private:
 };
