@@ -3,7 +3,6 @@
 
 #include "Actor/Actor.h"
 #include "BulletInfo.h"
-#include "Assets.h"
 
 // ‘O•ûéŒ¾
 class Actor;

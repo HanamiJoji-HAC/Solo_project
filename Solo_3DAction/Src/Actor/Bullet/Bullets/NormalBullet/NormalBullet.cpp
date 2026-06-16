@@ -1,6 +1,6 @@
 #include "NormalBullet.h"
 #include "GameConfig.h"
-
+#include "Assets.h"
 NormalBullet::NormalBullet(IWorld* world, const GSvector3& position, Actor* owner, unsigned int mesh_num, Bullet_Status status) : 
 	BulletBase(world, owner, mesh_num)
 {

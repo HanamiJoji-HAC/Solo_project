@@ -3,6 +3,7 @@
 #include "Actor/Bullet/Bullets/NormalBullet/NormalBullet.h"
 
 #include "GameConfig.h"
+#include "Assets.h"
 // コンストラクタ
 GunBase::GunBase(IWorld* world, BulletInfo::Bullet_ID bullet_id) :
 	world_{ world },

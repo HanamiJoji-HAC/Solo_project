@@ -1,5 +1,5 @@
 #include "EnemyRobot.h"
-
+#include "Assets.h"
 EnemyRobot::EnemyRobot(IWorld* world, const GSvector3& position, const Status& status) : EnemyBase(status),
 mesh_{ Mesh_Robot, Mesh_Robot, Mesh_Robot, (GSuint)Motion::MotionIdle, true, 2 },
 motion_{ (GSuint)Motion::MotionIdle },

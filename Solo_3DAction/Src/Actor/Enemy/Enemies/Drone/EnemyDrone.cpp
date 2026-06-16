@@ -1,5 +1,5 @@
 #include "EnemyDrone.h"
-
+#include "Assets.h"
 EnemyDrone::EnemyDrone(IWorld* world, const GSvector3& position, const Status& status) : EnemyBase(status),
 	mesh_{ Mesh_Drone, Mesh_Drone, Mesh_Drone, (GSuint)Motion::MotionIdle, true, 2 },
 	motion_{ (GSuint)Motion::MotionIdle },
