@@ -44,7 +44,7 @@ void LoadGameScene::load()
     gsLoadSkinMesh(Mesh_Player, "Assets/Player/Player.mshb");                                       ++loaded_count_;
     // “GƒƒbƒVƒ…‚Ì“Ç‚İ‚İ
     gsLoadSkinMesh(Mesh_Cannon, "Assets/Enemy/Enemy_Cannon/Enemy_Cannon.mshb");                     ++loaded_count_;
-    gsLoadSkinMesh(Mesh_Cannon, "Assets/Enemy/Enemy_Cannon/Enemy_Cannon_Body.mshb");                ++loaded_count_;
+    gsLoadSkinMesh(Mesh_Cannon_Body, "Assets/Enemy/Enemy_Cannon/Enemy_Cannon_Body.mshb");                ++loaded_count_;
     gsLoadSkinMesh(Mesh_Drone, "Assets/Enemy/Enemy_Drone/Enemy_Drone.mshb");                        ++loaded_count_;
     gsLoadSkinMesh(Mesh_Robot, "Assets/Enemy/Enemy_Robot/Enemy_Robot.mshb");                        ++loaded_count_;
     gsLoadMesh(Mesh_Helicopter, "Assets/Enemy/Enemy_Helicoptor/Enemy_Helicoptor_Body.mshb");        ++loaded_count_;
