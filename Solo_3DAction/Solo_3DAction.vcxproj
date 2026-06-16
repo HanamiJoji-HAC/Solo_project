@@ -143,6 +143,7 @@
     <ClCompile Include="Src\Actor\Bullet\BulletInfo.cpp" />
     <ClCompile Include="Src\Actor\Bullet\Bullets\NormalBullet\NormalBullet.cpp" />
     <ClCompile Include="Src\Actor\Character.cpp" />
+    <ClCompile Include="Src\Actor\Enemy\Enemies\Cannon\CannonBody.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Cannon\EnemyCannon.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.cpp" />
     <ClCompile Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Src\Gun\Guns\GunBase.cpp" />
     <ClCompile Include="Src\Gun\Guns\MachineGun\MachineGun.cpp" />
     <ClCompile Include="Src\Input.cpp" />
+    <ClCompile Include="Src\Math\MathUtility.cpp" />
     <ClCompile Include="Src\Scene\GamePlayScene.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Actor\Player\Player.cpp" />
@@ -203,6 +205,8 @@
     <ClInclude Include="Src\Actor\Bullet\Bullets\Missle.h" />
     <ClInclude Include="Src\Actor\Bullet\Bullets\NormalBullet\NormalBullet.h" />
     <ClInclude Include="Src\Actor\Character.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\CannonBody.h" />
+    <ClInclude Include="Src\Actor\Enemy\Enemies\Cannon\States\CannonMoveState.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Drone\EnemyDrone.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\EnemyHeilcoptor.h" />
     <ClInclude Include="Src\Actor\Enemy\Enemies\Helicopter\Propeller.h" />
@@ -237,6 +241,7 @@
     <ClInclude Include="Src\Gun\Guns\MissileLauncher.h" />
     <ClInclude Include="Src\Gun\IGun.h" />
     <ClInclude Include="Src\Input.h" />
+    <ClInclude Include="Src\Math\MathUtility.h" />
     <ClInclude Include="Src\Rendering\Layer.h" />
     <ClInclude Include="Src\Scene\GamePlayScene.h" />
     <ClInclude Include="Src\Actor\Player\Player.h" />
