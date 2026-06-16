@@ -21,11 +21,4 @@ enum {	// テクスチャデータ
 	Texture_Skybox,
 };
 
-enum {
-};
-
-enum {
-};
-
 #endif
-

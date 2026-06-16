@@ -40,6 +40,14 @@ public:
 	virtual void reload(float cool_time);
 	// 銃を登録する
 	virtual void add_gun();
+	// ステータスを取得する
+	virtual const Status& get_status() const;
+
+	void turn_to(Actor* target);
+	void turn_to(const GSvector3& target_pos, float delta_time);
+	bool is_complete_turn(Actor* target);
+	bool is_complete_turn(const GSvector3& target_pos);
+
 protected:
 	// プレイヤーを検索する
 	Actor* find_player() const;
@@ -51,15 +59,17 @@ protected:
 	float target_distance() const;
 protected:
 	// 目的座標を初期化する
-	void clear_point();
+	void clear_way_point();
 	// 目的座標を変更する
-	void change_point();
+	void change_way_point();
 	// 現在の目的座標を返却する
-	GSvector3 get_current_point() const;
+	GSvector3 get_current_way_point() const;
 	// 到着しているか？
-	bool is_arrive() const;
+	bool is_arrive_way_point() const;
 	// 現在の目的座標番号を返す
-	int get_current_point_num() const;
+	int get_way_point_num() const;
+	// 死亡中
+	bool is_dying() const;
 protected:
 	// 目的座標配列
 	std::vector<GSvector3> way_point_;
@@ -67,13 +77,15 @@ protected:
 	GunManager guns_;
 private:
 	// 現在の目的座標
-	GSvector3 current_point_;
+	GSvector3 current_way_point_;
 	// 次の目的座標
 	GSvector3 next_point_;
 	// 到着判定距離
 	float arrive_distance_{ 0.1f };
 	// 到着ポイントカウンター
-	int current_point_count_{ -1 };
+	int current_way_point_count_{ -1 };
+	// ピッチ角差分計算用
+	float pitch_{ 0.0f };
 private:
 	//	プレイヤー取得用
 	Actor* player_ = nullptr;

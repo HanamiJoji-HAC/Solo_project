@@ -1,5 +1,7 @@
 #include "Actor/Actor.h"
 
+#include "Math/MathUtility.h"
+
 const float FootOffset{ 0.1f };
 // XV
 void Actor::update(float) {}

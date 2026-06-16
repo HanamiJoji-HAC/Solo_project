@@ -1,6 +1,8 @@
 #include "Propeller.h"
 #include "EnemyHeilcoptor.h"
+
 #include "imgui/imgui.h"
+#include "Assets.h"
 
 Propeller::Propeller(IWorld* world, const GSvector3& position, EnemyHeilcoptor* enemy_heil) :
 	heil_(enemy_heil)

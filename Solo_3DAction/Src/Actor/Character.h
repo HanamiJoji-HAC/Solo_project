@@ -72,7 +72,7 @@ public:
 	virtual bool check_ground();									// 接地判定
 	void set_invisible(bool is_invisible, float invisible_timer); 	// 無敵を設定する
 	void invisible(float delta_time);								// 無敵を設定する（タイマー式）
-	bool is_invisible();											// 無敵中か？
+	bool is_invisible() const;										// 無敵中か？
 protected:
 	virtual void collide_actor(Actor& other);						// アクターとの衝突判定
 	virtual void collide_field();									// 床との衝突判定

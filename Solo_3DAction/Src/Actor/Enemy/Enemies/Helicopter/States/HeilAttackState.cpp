@@ -11,11 +11,10 @@ void HeilAttackState::on_enter()
 void HeilAttackState::on_update(float delta_time)
 {
 	Actor* player = owner_.get_player();
-	GSvector3 target_pos = player->transform().position();
 	// プレイヤーに回転する
-	owner_.turn_to(player->transform().position(), 60.0f, delta_time);
+	owner_.turn_to(player->transform().position(), delta_time);
 	// 射撃後、索敵状態に遷移する
-	if (owner_.is_complete_turn(target_pos)) {
+	if (owner_.is_complete_turn(player)) {
 		// 射撃を実行
 		if (!is_fired_) {
 			owner_.fire(GunInfo::MachineGun);

@@ -28,21 +28,19 @@ public:
 	// 移動
 	void move(float delta_time, float move_speed) override;
 	// 方向転換
-	void turn_to(const GSvector3& target_pos, float rotate_speed, float delta_time);
+	//void turn_to(const GSvector3& target_pos, float rotate_speed, float delta_time);
 
 	void chase_bullet();
 
 	void add_gun() override;
 public:
 	// 回転は完了しているか？
-	bool is_complete_turn(GSvector3 target_pos);
+	//bool is_complete_turn(GSvector3 target_pos);
 	// 回転量の取得
-	float get_turn_angle(const GSvector3& target_pos);
+	//float get_turn_angle(const GSvector3& target_pos);
 	GSvector3 get_waypoint_pos() const;
 	// 索敵範囲内か？
 	bool is_search(float search_distance = 10.0f) const;
-	// ステータスを取得する
-	const Status& get_status() const;
 	// ステートを変更する
 	void change_state(EnemyState state);
 	Actor* get_player();

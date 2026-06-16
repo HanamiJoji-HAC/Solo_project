@@ -44,6 +44,8 @@ private:
 	void collide_actor(Actor& other);
 	// 攻撃判定を生成
 	void generate_attack_collider();
+	// 銃を登録
+	void add_gun() override;
 private:
 	StateMachine state_machine_;
 	// アニメーションメッシュ
@@ -59,6 +61,5 @@ private:
 	// プレーヤー
 	Actor* player_;
 	// 体力
-	int health_;
 };
 #endif

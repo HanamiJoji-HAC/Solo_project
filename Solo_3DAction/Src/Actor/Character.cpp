@@ -108,6 +108,6 @@ void Character::invisible(float delta_time) {
     status_.invisible_timer_ -= (delta_time / cREF);
 }
 
-bool Character::is_invisible() {
+bool Character::is_invisible() const {
     return is_invisible_;
 }
