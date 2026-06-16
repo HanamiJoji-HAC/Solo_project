@@ -1,8 +1,14 @@
+#include "World/Field.h"
+
 #include "PlayerBullet.h"
 #include "Collision/AttackCollider.h"
 #include "World/IWorld.h"
-#include "World/Field.h"
-#include "Math/Line.h"// コンストラクタ
+
+#include "Math/Line.h"
+
+#include "Assets.h"
+
+// コンストラクタ
 PlayerBullet::PlayerBullet(IWorld* world, const GSvector3& position, const GSvector3& velocity) :
 	mesh_{ Mesh_Bullet, 0, 0, 0, false, 1, 0 }
 {
@@ -22,7 +28,9 @@ PlayerBullet::PlayerBullet(IWorld* world, const GSvector3& position, const GSvec
 	lifespan_timer_ = 60.0f;
 	//
 
-}// 更新
+}
+
+// 更新
 void PlayerBullet::update(float delta_time) {
 	// 寿命が尽きたら死亡
 	if (lifespan_timer_ <= 0.0f) {
@@ -46,7 +54,8 @@ void PlayerBullet::update(float delta_time) {
 	// 移動する（ワールド座標系基準）
 	transform_.translate(velocity_ * delta_time, GStransform::Space::World);
 }
-// 描画
+
+// 描画
 void PlayerBullet::draw() const {
 	// デバッグ表示
 	glPushMatrix();
@@ -56,8 +65,11 @@ void PlayerBullet::draw() const {
 	gsDrawMesh(Mesh_Bullet);
 	glPopMatrix();
 	collider().draw();
-}// 衝突リアクション
+}
+
+// 衝突リアクション
 void PlayerBullet::react(Actor& other) {
 	// 衝突したら死亡
 	die();
-}
+}
+

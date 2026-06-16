@@ -269,7 +269,7 @@ void CameraTPS::update_normal(Actor* player, float delta_time) {
 
 // ヨー・ピッチの値を参照する
 GSvector3 CameraTPS::get_yaw_pitch() const {
-	return GSvector3{ yaw_, pitch_, 0.0f};
+	return GSvector3{ yaw_, pitch_, 0.0f };
 }
 
 // ロックオン時のヨーを設定

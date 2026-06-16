@@ -9,6 +9,7 @@
 #include "External/json.hpp"
 using json = nlohmann::json;
 
+// 前方宣言
 struct Bullet_Status;
 
 // Jsonの読み込みに関連する処理を保持しているクラス

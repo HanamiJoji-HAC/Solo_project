@@ -40,9 +40,9 @@ bool Input::get_action_input(InputAction action) const {
 	case InputAction::JUMP:
 		return is_pad_ ? gsXBoxPadButtonTrigger(0, GS_XBOX_PAD_A) : gsGetKeyTrigger(GKEY_SPACE);
 	case InputAction::SETBOOST:
-		return is_pad_ ? gsXBoxPadButtonTrigger(0, GS_XBOX_PAD_A) : gsGetKeyTrigger(GKEY_SPACE);
+		return is_pad_ ? gsXBoxPadButtonTrigger(0, GS_XBOX_PAD_B) : gsGetKeyTrigger(GKEY_SPACE);
 	case InputAction::BOOST:
-		return is_pad_ ? gsXBoxPadButtonState(0, GS_XBOX_PAD_A) : gsGetKeyState(GKEY_SPACE);
+		return is_pad_ ? gsXBoxPadButtonState(0, GS_XBOX_PAD_B) : gsGetKeyState(GKEY_SPACE);
 	case InputAction::ATTACK:
 		return is_pad_ ? gsXBoxPadButtonTrigger(0, GS_XBOX_PAD_LEFT_SHOULDER) : gsGetMouseButtonTrigger(GMOUSE_BUTTON_1);
 	case InputAction::FIRE:
@@ -108,9 +108,10 @@ void Input::update_WASD_axis() {
 void Input::update_mouce_axis() {
 	int x, y;
 	gsGetMouseVelocity(&x, &y, 0);
-	right_axis_.x = x;
+	// TODO:感度調節オプション
+	right_axis_.x = x /10;
 	// y移動量だけ逆なので反転
-	right_axis_.y = -y;
+	right_axis_.y = -(y / 10);
 }
 
 float Input::get_left_dir() const {

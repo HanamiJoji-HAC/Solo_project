@@ -60,6 +60,7 @@ public:
 	BoundingSphere collider() const;
 	// 指定された場所までTweenで移動する
 	TweenUnit& move_to(const GSvector3& to, float duration);
+
 	// コピー禁止
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;
